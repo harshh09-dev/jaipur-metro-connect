@@ -15,8 +15,11 @@ import {
   Phone,
   Mail,
   Building2,
+  Landmark,
+  CreditCard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const navItems = [
   { path: "/journey-planner", label: "Journey Planner", icon: Train },
@@ -64,6 +67,7 @@ export function Header() {
           </nav>
 
           <div className="hidden lg:flex items-center gap-2">
+            <ThemeToggle />
             <Link to="/track-complaint">
               <Button variant="ghost" size="sm" className="text-primary-foreground/70 hover:text-primary-foreground hover:bg-primary-foreground/10 gap-1.5">
                 <Search className="w-4 h-4" />

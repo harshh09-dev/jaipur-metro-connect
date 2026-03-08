@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,58 +6,58 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 220 25% 10%;
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 25% 10%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 10%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 215 80% 35%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 222 47% 11%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 350 60% 45%;
+    --secondary: 217 91% 60%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 15% 93%;
-    --muted-foreground: 215 12% 45%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 35 90% 52%;
+    --accent: 347 77% 50%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 20% 88%;
-    --input: 214 20% 88%;
-    --ring: 215 80% 35%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 222 47% 11%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --success: 145 63% 40%;
+    --success: 160 84% 39%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 43 96% 56%;
+    --warning-foreground: 222 47% 11%;
 
-    --info: 200 80% 45%;
+    --info: 217 91% 60%;
     --info-foreground: 0 0% 100%;
 
-    --metro-pink: 350 60% 45%;
-    --metro-blue: 215 80% 35%;
-    --metro-gold: 35 90% 52%;
-    --metro-dark: 220 25% 10%;
+    --metro-red: 347 77% 50%;
+    --metro-navy: 222 47% 11%;
+    --metro-blue: 217 91% 60%;
+    --metro-slate: 215 16% 47%;
 
-    --sidebar-background: 215 80% 35%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 215 80% 35%;
-    --sidebar-accent: 215 70% 42%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 215 60% 45%;
-    --sidebar-ring: 0 0% 100%;
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 210 40% 98%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 210 40% 98%;
   }
 }
 
@@ -67,23 +67,25 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
-    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    @apply bg-background text-foreground font-sans antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'IBM Plex Sans', system-ui, sans-serif;
     @apply font-semibold tracking-tight;
   }
 }
 
 @layer components {
   .metro-gradient {
-    background: linear-gradient(135deg, hsl(var(--metro-blue)), hsl(var(--metro-pink)));
+    background: linear-gradient(135deg, hsl(var(--metro-navy)), hsl(217, 33%, 17%));
+  }
+
+  .metro-gradient-accent {
+    background: linear-gradient(135deg, hsl(var(--metro-red)), hsl(347, 77%, 40%));
   }
 
   .metro-card {
-    @apply bg-card rounded-lg border shadow-sm hover:shadow-md transition-shadow duration-200;
+    @apply bg-card rounded-xl border shadow-sm hover:shadow-md transition-all duration-200;
   }
 
   .metro-badge {
@@ -91,10 +93,21 @@
   }
 
   .section-header {
-    @apply text-2xl font-bold text-foreground mb-6;
+    @apply text-3xl font-bold text-foreground mb-6;
   }
 
   .page-container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
+  }
+
+  .glass-card {
+    @apply bg-card/80 backdrop-blur-sm rounded-xl border shadow-lg;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(var(--metro-red)), hsl(var(--metro-blue)));
   }
 }

@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Header, Footer } from "@/components/Layout";
 import HomePage from "./pages/HomePage";
 import JourneyPlannerPage from "./pages/JourneyPlannerPage";
+import MetroMapPage from "./pages/MetroMapPage";
 import StationsPage from "./pages/StationsPage";
 import TimingsPage from "./pages/TimingsPage";
 import ComplaintsPage from "./pages/ComplaintsPage";
@@ -29,6 +30,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/journey-planner" element={<JourneyPlannerPage />} />
+              <Route path="/metro-map" element={<MetroMapPage />} />
               <Route path="/stations" element={<StationsPage />} />
               <Route path="/timings" element={<TimingsPage />} />
               <Route path="/complaints" element={<ComplaintsPage />} />

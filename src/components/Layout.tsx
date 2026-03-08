@@ -12,11 +12,13 @@ import {
   Menu,
   X,
   Home,
+  Map,
 } from "lucide-react";
 
 const navItems = [
   { path: "/", label: "Home", icon: Home },
   { path: "/journey-planner", label: "Journey Planner", icon: Train },
+  { path: "/metro-map", label: "Metro Map", icon: Map },
   { path: "/stations", label: "Stations", icon: MapPin },
   { path: "/timings", label: "Timings", icon: Clock },
   { path: "/complaints", label: "File Complaint", icon: MessageSquare },

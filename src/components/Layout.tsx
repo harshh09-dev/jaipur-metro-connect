@@ -22,7 +22,8 @@ const navItems = [
   { path: "/journey-planner", label: "Journey Planner", icon: Train },
   { path: "/metro-map", label: "Metro Map", icon: Map },
   { path: "/stations", label: "Stations", icon: MapPin },
-  { path: "/timings", label: "Timings", icon: Clock },
+  { path: "/tourism", label: "Tourism", icon: MapPin },
+  { path: "/smart-card", label: "Smart Card", icon: Train },
   { path: "/complaints", label: "Complaints", icon: MessageSquare },
   { path: "/alerts", label: "Alerts", icon: AlertTriangle },
 ];

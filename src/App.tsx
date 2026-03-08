@@ -14,6 +14,8 @@ import TrackComplaintPage from "./pages/TrackComplaintPage";
 import AlertsPage from "./pages/AlertsPage";
 import AnnouncementsPage from "./pages/AnnouncementsPage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
+import TouristSpotsPage from "./pages/TouristSpotsPage";
+import SmartCardPage from "./pages/SmartCardPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +38,8 @@ function AppRoutes() {
           <Route path="/track-complaint" element={<TrackComplaintPage />} />
           <Route path="/alerts" element={<AlertsPage />} />
           <Route path="/announcements" element={<AnnouncementsPage />} />
+          <Route path="/tourism" element={<TouristSpotsPage />} />
+          <Route path="/smart-card" element={<SmartCardPage />} />
           <Route path="/admin" element={<AdminDashboardPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

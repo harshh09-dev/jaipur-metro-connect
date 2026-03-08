@@ -1,19 +1,20 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Train, MapPin, Clock, MessageSquare, AlertTriangle, ArrowRight, Megaphone, Map, Search, ArrowRightLeft, Shield, Zap } from "lucide-react";
+import { Train, MapPin, Clock, MessageSquare, AlertTriangle, ArrowRight, Megaphone, Map, Search, ArrowRightLeft, Shield, Zap, CreditCard, Landmark, TreePine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { serviceAlerts, announcements, allStations, calculateFare, metroLines } from "@/data/metro-data";
+import { touristSpots } from "@/data/tourist-data";
 
 const quickLinks = [
   { path: "/journey-planner", label: "Journey Planner", description: "Plan route, check fare & time", icon: Train, color: "bg-secondary" },
   { path: "/metro-map", label: "Metro Map", description: "Interactive network map", icon: Map, color: "bg-accent" },
   { path: "/stations", label: "Stations", description: "Facilities & nearby places", icon: MapPin, color: "bg-success" },
-  { path: "/timings", label: "Timings", description: "Schedules & frequency", icon: Clock, color: "bg-info" },
-  { path: "/complaints", label: "File Complaint", description: "Report issues or feedback", icon: MessageSquare, color: "bg-warning" },
-  { path: "/track-complaint", label: "Track Complaint", description: "Check complaint status", icon: Search, color: "bg-metro-slate" },
+  { path: "/tourism", label: "Tourism", description: "Explore Jaipur via metro", icon: Landmark, color: "bg-info" },
+  { path: "/smart-card", label: "Smart Card", description: "Balance & recharge", icon: CreditCard, color: "bg-warning" },
+  { path: "/complaints", label: "File Complaint", description: "Report issues or feedback", icon: MessageSquare, color: "bg-metro-slate" },
 ];
 
 export default function HomePage() {
@@ -244,6 +245,74 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Explore Jaipur via Metro */}
+      <section className="page-container">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="section-header mb-0">Explore Jaipur via Metro</h2>
+          <Link to="/tourism">
+            <Button variant="ghost" size="sm" className="text-secondary gap-1">View All <ArrowRight className="w-3 h-3" /></Button>
+          </Link>
+        </div>
+        <p className="text-muted-foreground mb-6 -mt-2">Discover top attractions easily accessible by metro.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {touristSpots.slice(0, 4).map(spot => (
+            <Card key={spot.id} className="group overflow-hidden hover:shadow-lg transition-all">
+              <div className="h-36 bg-muted overflow-hidden">
+                <img src={spot.image} alt={spot.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+              </div>
+              <CardContent className="p-4">
+                <h3 className="font-bold text-sm text-foreground mb-1">{spot.name}</h3>
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-2">
+                  <Train className="w-3 h-3 text-secondary" />
+                  <span>{spot.nearestStation}</span>
+                  <span className="font-semibold text-foreground">· {spot.distance}</span>
+                </div>
+                <Link to={`/journey-planner?to=${spot.nearestStationId}`}>
+                  <Button size="sm" variant="outline" className="w-full text-xs gap-1 h-8">
+                    Plan Route <ArrowRight className="w-3 h-3" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* Smart Card CTA */}
+      <section className="bg-secondary/5 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div>
+              <Badge className="bg-secondary text-secondary-foreground mb-3">Smart Card</Badge>
+              <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">Ride Smarter with JMRC Card</h2>
+              <p className="text-muted-foreground mb-4">Get 15% discount on every journey. Check balance, recharge online, and skip the queue.</p>
+              <div className="flex gap-3">
+                <Link to="/smart-card">
+                  <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2">
+                    <CreditCard className="w-4 h-4" /> Check Balance
+                  </Button>
+                </Link>
+                <Link to="/smart-card">
+                  <Button variant="outline" className="gap-2">Recharge Now</Button>
+                </Link>
+              </div>
+            </div>
+            <div className="flex justify-center">
+              <div className="bg-gradient-to-br from-primary via-primary to-secondary/80 rounded-2xl p-6 text-primary-foreground w-72 shadow-xl">
+                <p className="text-[10px] text-primary-foreground/50 uppercase tracking-widest mb-1">JMRC Smart Card</p>
+                <p className="text-lg font-mono font-bold tracking-wider mb-6">4532 8890 XXXX</p>
+                <div className="flex items-end justify-between">
+                  <div>
+                    <p className="text-[10px] text-primary-foreground/50">Balance</p>
+                    <p className="text-xl font-extrabold">₹145</p>
+                  </div>
+                  <CreditCard className="w-6 h-6 text-primary-foreground/30" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       {/* Announcements */}
       <section className="page-container">
         <div className="flex items-center justify-between mb-6">

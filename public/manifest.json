@@ -1,0 +1,18 @@
+{
+  "name": "JMRC Metro",
+  "short_name": "JMRC",
+  "description": "Jaipur Metro Rail Corporation - Smart Metro Services Platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f7fa",
+  "theme_color": "#1a5096",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["transportation", "government"]
+}

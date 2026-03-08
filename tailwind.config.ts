@@ -14,7 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -63,10 +63,10 @@ export default {
           foreground: "hsl(var(--info-foreground))",
         },
         metro: {
-          pink: "hsl(var(--metro-pink))",
+          red: "hsl(var(--metro-red))",
+          navy: "hsl(var(--metro-navy))",
           blue: "hsl(var(--metro-blue))",
-          gold: "hsl(var(--metro-gold))",
-          dark: "hsl(var(--metro-dark))",
+          slate: "hsl(var(--metro-slate))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -97,11 +97,21 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.7" },
         },
+        "fade-in": {
+          from: { opacity: "0", transform: "translateY(10px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "slide-in-right": {
+          from: { opacity: "0", transform: "translateX(20px)" },
+          to: { opacity: "1", transform: "translateX(0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "pulse-gentle": "pulse-gentle 2s ease-in-out infinite",
+        "fade-in": "fade-in 0.5s ease-out",
+        "slide-in-right": "slide-in-right 0.5s ease-out",
       },
     },
   },

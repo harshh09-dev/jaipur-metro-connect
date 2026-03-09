@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import jmrcLogo from "@/assets/jmrc-logo.png";
 
 const navItems = [
   { path: "/journey-planner", label: "Journey Planner", icon: Train },
@@ -40,9 +41,7 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-lg bg-accent flex items-center justify-center">
-              <Train className="w-5 h-5 text-accent-foreground" />
-            </div>
+            <img src={jmrcLogo} alt="JMRC Logo" className="w-9 h-9 object-contain" />
             <div>
               <h1 className="text-primary-foreground text-base font-bold leading-none">JMRC</h1>
               <p className="text-primary-foreground/60 text-[10px] font-medium tracking-wider uppercase">Jaipur Metro</p>
@@ -150,9 +149,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
-                <Train className="w-4 h-4 text-accent-foreground" />
-              </div>
+              <img src={jmrcLogo} alt="JMRC Logo" className="w-8 h-8 object-contain" />
               <span className="font-bold text-lg">JMRC</span>
             </div>
             <p className="text-sm text-primary-foreground/60 leading-relaxed">Providing safe, reliable and efficient metro rail services to the people of Jaipur since 2015.</p>

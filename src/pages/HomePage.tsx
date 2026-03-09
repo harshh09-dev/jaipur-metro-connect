@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Train, MapPin, Clock, MessageSquare, AlertTriangle, ArrowRight, Megaphone, Map, Search, ArrowRightLeft, Shield, Zap, CreditCard, Landmark, TreePine, ChevronRight, Users, Route } from "lucide-react";
+import { Train, MapPin, Clock, MessageSquare, AlertTriangle, ArrowRight, Megaphone, Map, Search, ArrowRightLeft, Shield, Zap, CreditCard, Landmark, TreePine, ChevronRight, Users, Route, Building2, Calendar, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { serviceAlerts, announcements, allStations, calculateFare, metroLines } from "@/data/metro-data";
+import { serviceAlerts, announcements, allStations, pinkLineStations, calculateFare, metroLines, jmrcInfo } from "@/data/metro-data";
 import { touristSpots } from "@/data/tourist-data";
 import heroImage from "@/assets/hero-metro.jpg";
 
@@ -33,9 +33,8 @@ export default function HomePage() {
 
   return (
     <div>
-      {/* Hero Section with Background Image */}
+      {/* Hero Section */}
       <section className="relative min-h-[600px] lg:min-h-[700px] flex items-center overflow-hidden">
-        {/* Background Image */}
         <div className="absolute inset-0">
           <img src={heroImage} alt="Jaipur Metro Station" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/40" />
@@ -44,18 +43,17 @@ export default function HomePage() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left - Text */}
             <div className="animate-fade-in">
               <div className="inline-flex items-center gap-2 bg-success/20 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6 text-sm border border-success/30">
                 <div className="w-2 h-2 rounded-full bg-success animate-pulse-gentle" />
-                <span className="text-success-foreground font-medium">All lines operational</span>
+                <span className="text-success-foreground font-medium">Pink Line operational</span>
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-5 leading-[1.1] tracking-tight text-white">
                 Your Daily Metro<br />
                 Companion for <span className="text-accent">Jaipur</span>
               </h1>
               <p className="text-lg text-white/70 max-w-lg mb-8 leading-relaxed">
-                Plan routes, track trains, recharge smart cards, and explore the Pink City — all from one platform trusted by 80,000+ daily riders.
+                Plan routes, track trains, recharge smart cards, and explore the Pink City — powered by Jaipur Metro Rail Corporation since 2015.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link to="/journey-planner">
@@ -70,12 +68,12 @@ export default function HomePage() {
                 </Link>
               </div>
 
-              {/* Trust indicators */}
+              {/* Real stats from Wikipedia */}
               <div className="flex items-center gap-6 mt-10 pt-6 border-t border-white/10">
                 {[
-                  { icon: Users, value: "80K+", label: "Daily Riders" },
-                  { icon: Route, value: "32 km", label: "Network" },
-                  { icon: Train, value: "18", label: "Stations" },
+                  { icon: Users, value: "55K+", label: "Daily Riders" },
+                  { icon: Route, value: "11.97 km", label: "Network" },
+                  { icon: Train, value: "11", label: "Stations" },
                 ].map(item => (
                   <div key={item.label} className="flex items-center gap-2">
                     <item.icon className="w-4 h-4 text-accent" />
@@ -88,7 +86,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right - Mini Journey Planner Card */}
+            {/* Quick Route Finder */}
             <div className="animate-slide-in-right">
               <Card className="bg-card/95 backdrop-blur-xl border-border/50 shadow-2xl">
                 <CardContent className="p-6">
@@ -107,7 +105,7 @@ export default function HomePage() {
                         </SelectTrigger>
                         <SelectContent>
                           {allStations.map(s => (
-                            <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                            <SelectItem key={s.id} value={s.id}>{s.name} <span className="text-muted-foreground ml-1">({s.line === "pink" ? "Pink" : "Orange"})</span></SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -128,7 +126,7 @@ export default function HomePage() {
                         </SelectTrigger>
                         <SelectContent>
                           {allStations.map(s => (
-                            <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
+                            <SelectItem key={s.id} value={s.id}>{s.name} <span className="text-muted-foreground ml-1">({s.line === "pink" ? "Pink" : "Orange"})</span></SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -214,13 +212,80 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Metro Lines Overview */}
+      {/* About JMRC */}
       <section className="py-16 bg-muted/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            <div>
+              <Badge variant="secondary" className="mb-4">About JMRC</Badge>
+              <h2 className="text-3xl font-bold text-foreground mb-4">Jaipur Metro Rail Corporation</h2>
+              <p className="text-muted-foreground mb-4 leading-relaxed">
+                The Jaipur Metro is a rapid transit system serving Jaipur, Rajasthan's capital city. Established on {jmrcInfo.established}, JMRC began commercial operations on {jmrcInfo.commercialService}. It is the <strong className="text-foreground">first metro in India to run on a triple-storey elevated road and metro track</strong>.
+              </p>
+              <p className="text-muted-foreground mb-6 leading-relaxed">
+                The Pink Line (East–West Corridor) runs {jmrcInfo.totalNetworkLength} from Mansarovar to Badi Chaupar across 11 stations, connecting key areas including Railway Station, Sindhi Camp, and the historic walled city.
+              </p>
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                {[
+                  { label: "Track Gauge", value: "Standard (1435 mm)" },
+                  { label: "Top Speed", value: jmrcInfo.topSpeed },
+                  { label: "Rolling Stock", value: "10 trains, 4 coaches" },
+                  { label: "Electrification", value: "25 kV AC OHE" },
+                ].map(item => (
+                  <div key={item.label} className="p-3 rounded-lg bg-card border border-border">
+                    <p className="text-xs text-muted-foreground uppercase tracking-wider">{item.label}</p>
+                    <p className="text-sm font-semibold text-foreground">{item.value}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                HQ: {jmrcInfo.headquarters} · CMD: {jmrcInfo.chairman}
+              </p>
+            </div>
+
+            {/* Phase Timeline */}
+            <div>
+              <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-accent" /> Project Phases
+              </h3>
+              <div className="space-y-4">
+                {[
+                  { ...jmrcInfo.phase1A, status: "Completed", color: "bg-success" },
+                  { ...jmrcInfo.phase1B, status: "Completed", color: "bg-success" },
+                  { ...jmrcInfo.phase1C, status: "DPR Ready", color: "bg-warning" },
+                  { ...jmrcInfo.phase1D, status: "Planned", color: "bg-info" },
+                  { ...jmrcInfo.phase2, status: "Planned", color: "bg-secondary" },
+                ].map((phase, i) => (
+                  <div key={i} className="flex gap-3 items-start">
+                    <div className="flex flex-col items-center">
+                      <div className={`w-3 h-3 rounded-full ${phase.color} shrink-0 mt-1`} />
+                      {i < 4 && <div className="w-0.5 h-full bg-border min-h-[2rem]" />}
+                    </div>
+                    <Card className="flex-1">
+                      <CardContent className="p-4">
+                        <div className="flex items-center justify-between mb-1">
+                          <h4 className="font-semibold text-sm text-foreground">{phase.name}</h4>
+                          <Badge variant="outline" className="text-[10px]">{phase.status}</Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground">{phase.route} · {phase.length} · {phase.stations} station{phase.stations > 1 ? "s" : ""}</p>
+                        {"opened" in phase && <p className="text-xs text-success mt-1">Opened: {phase.opened}</p>}
+                      </CardContent>
+                    </Card>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Metro Lines Overview */}
+      <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-3xl font-bold text-foreground mb-1">Metro Network</h2>
-              <p className="text-muted-foreground">2 operational lines covering 32 km across Jaipur</p>
+              <p className="text-muted-foreground">Pink Line operational · Orange Line planned</p>
             </div>
             <Link to="/metro-map">
               <Button variant="outline" size="sm" className="gap-1">View Map <ArrowRight className="w-3 h-3" /></Button>
@@ -239,9 +304,12 @@ export default function HomePage() {
                         </div>
                         <div>
                           <h3 className="font-bold text-foreground text-lg">{line.name}</h3>
-                          <p className="text-sm text-muted-foreground">{line.stations.length} stations · {line.id === "pink" ? "East–West" : "North–South"}</p>
+                          <p className="text-sm text-muted-foreground">{line.stations.length} stations · {line.length} · {line.corridor}</p>
                         </div>
                       </div>
+                      <Badge variant={line.status === "operational" ? "default" : "secondary"} className="text-[10px]">
+                        {line.status === "operational" ? "Operational" : "Planned"}
+                      </Badge>
                     </div>
                     <div className="flex items-center gap-1 overflow-x-auto pb-1">
                       {line.stations.map((s, i) => (
@@ -269,10 +337,10 @@ export default function HomePage() {
             <div className="relative p-10 sm:p-14">
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center text-white">
                 {[
-                  { value: "2", label: "Metro Lines", icon: Train },
-                  { value: "18", label: "Stations", icon: MapPin },
-                  { value: "32 km", label: "Total Route", icon: Map },
-                  { value: "80K+", label: "Daily Riders", icon: Zap },
+                  { value: "1", label: "Operational Line", icon: Train },
+                  { value: "11", label: "Stations", icon: MapPin },
+                  { value: "11.97 km", label: "Route Length", icon: Map },
+                  { value: "55K+", label: "Daily Riders", icon: Zap },
                 ].map(stat => {
                   const Icon = stat.icon;
                   return (
@@ -295,7 +363,7 @@ export default function HomePage() {
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-3xl font-bold text-foreground mb-1">Explore Jaipur via Metro</h2>
-              <p className="text-muted-foreground">Discover top attractions easily accessible by metro</p>
+              <p className="text-muted-foreground">Discover top attractions accessible from Pink Line stations</p>
             </div>
             <Link to="/tourism">
               <Button variant="outline" size="sm" className="gap-1">View All <ArrowRight className="w-3 h-3" /></Button>
@@ -307,7 +375,7 @@ export default function HomePage() {
                 <div className="h-44 bg-muted overflow-hidden relative">
                   <img src={spot.image} alt={spot.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                  <Badge className="absolute bottom-3 left-3 bg-white/90 text-foreground text-[10px] font-semibold backdrop-blur-sm">{spot.category}</Badge>
+                  <span className="absolute bottom-3 left-3 bg-white/90 text-foreground text-[10px] font-semibold backdrop-blur-sm px-2 py-0.5 rounded-full">{spot.category}</span>
                 </div>
                 <CardContent className="p-4">
                   <h3 className="font-bold text-foreground mb-2">{spot.name}</h3>
@@ -333,9 +401,14 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
             <div>
-              <Badge className="bg-secondary/10 text-secondary border-secondary/20 mb-4">Smart Card</Badge>
+              <Badge variant="secondary" className="mb-4">Smart Card</Badge>
               <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Ride Smarter with JMRC Card</h2>
-              <p className="text-muted-foreground mb-6 text-lg leading-relaxed">Get 15% discount on every journey. Check balance, recharge online, and skip the queue at stations.</p>
+              <p className="text-muted-foreground mb-4 text-lg leading-relaxed">Get 15% discount on every journey with Store Value smart cards. Also available: JMRC/HDFC Bank co-branded cards and Tourist cards for 1-day or 3-day unlimited travel.</p>
+              <ul className="text-sm text-muted-foreground space-y-2 mb-6">
+                <li className="flex items-center gap-2"><CreditCard className="w-4 h-4 text-accent" /> Store Value cards for regular commuters</li>
+                <li className="flex items-center gap-2"><CreditCard className="w-4 h-4 text-accent" /> Tourist cards — 1 day & 3 day unlimited travel</li>
+                <li className="flex items-center gap-2"><CreditCard className="w-4 h-4 text-accent" /> Available at all station counters</li>
+              </ul>
               <div className="flex gap-3">
                 <Link to="/smart-card">
                   <Button size="lg" className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2 shadow-lg shadow-secondary/20">

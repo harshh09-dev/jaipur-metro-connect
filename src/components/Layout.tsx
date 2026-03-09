@@ -152,7 +152,7 @@ export function Footer() {
               <img src={jmrcLogo} alt="JMRC Logo" className="w-8 h-8 object-contain" />
               <span className="font-bold text-lg">JMRC</span>
             </div>
-            <p className="text-sm text-primary-foreground/60 leading-relaxed">Providing safe, reliable and efficient metro rail services to the people of Jaipur since 2015.</p>
+            <p className="text-sm text-primary-foreground/60 leading-relaxed">Jaipur Metro Rail Corporation Ltd. — India's first metro on a triple-storey elevated road. Serving Jaipur since 3 June 2015.</p>
           </div>
           <div>
             <h3 className="font-semibold text-sm uppercase tracking-wider text-primary-foreground/40 mb-4">Services</h3>
@@ -175,9 +175,10 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-sm uppercase tracking-wider text-primary-foreground/40 mb-4">Contact</h3>
             <ul className="space-y-2.5 text-sm text-primary-foreground/70">
-              <li className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-accent" /> 1800-180-6060</li>
-              <li className="flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-accent" /> info@jaipurmetro.in</li>
-              <li className="flex items-center gap-2"><Building2 className="w-3.5 h-3.5 text-accent" /> Metro Bhawan, Jaipur</li>
+              <li className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-accent" /> 0141-2822100</li>
+              <li className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-accent" /> 1800-180-6060 (Toll Free)</li>
+              <li className="flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-accent" /> cmd@jaipurmetrorail.in</li>
+              <li className="flex items-center gap-2"><Building2 className="w-3.5 h-3.5 text-accent" /> Khanij Bhavan, C-Scheme, Jaipur</li>
             </ul>
           </div>
         </div>

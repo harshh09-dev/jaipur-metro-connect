@@ -42,26 +42,26 @@ export default function HomePage() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative min-h-[600px] lg:min-h-[700px] flex items-center overflow-hidden">
+      <section className="relative min-h-[620px] lg:min-h-[720px] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img src={heroImage} alt="Jaipur Metro Station" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[hsl(212,100%,18%)]/95 via-[hsl(212,100%,22%)]/85 to-[hsl(212,100%,30%)]/55" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[hsl(212,100%,12%)]/70 via-transparent to-transparent" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in">
-              <div className="inline-flex items-center gap-2 bg-success/20 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6 text-sm border border-success/30">
-                <div className="w-2 h-2 rounded-full bg-success animate-pulse-gentle" />
-                <span className="text-success-foreground font-medium">Pink Line operational</span>
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-1.5 mb-6 text-sm border border-white/20">
+                <Sparkles className="w-3.5 h-3.5 text-accent" />
+                <span className="text-white/90 font-medium tracking-wide">Official JMRC Citizen Platform</span>
               </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-5 leading-[1.1] tracking-tight text-white">
-                Your Daily Metro<br />
-                Companion for <span className="text-accent">Jaipur</span>
+              <h1 className="text-4xl sm:text-5xl lg:text-[3.75rem] font-extrabold mb-5 leading-[1.05] tracking-tight text-white">
+                Smart Metro Services<br />
+                for <span className="text-accent">Jaipur</span>
               </h1>
-              <p className="text-lg text-white/70 max-w-lg mb-8 leading-relaxed">
-                Plan routes, track trains, recharge smart cards, and explore the Pink City — powered by Jaipur Metro Rail Corporation since 2015.
+              <p className="text-lg text-white/75 max-w-xl mb-8 leading-relaxed">
+                Check routes, fares, timings, smart cards, complaints, updates, and citizen services — all in one place.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link to="/journey-planner">
@@ -69,9 +69,14 @@ export default function HomePage() {
                     Plan Journey <ArrowRight className="w-4 h-4" />
                   </Button>
                 </Link>
+                <Link to="/smart-card">
+                  <Button size="lg" className="bg-white text-primary hover:bg-white/90 text-base font-semibold gap-2 h-12 px-6 shadow-lg">
+                    <CreditCard className="w-4 h-4" /> Recharge Card
+                  </Button>
+                </Link>
                 <Link to="/metro-map">
                   <Button size="lg" variant="outline" className="text-base font-semibold border-white/30 text-white hover:bg-white/10 h-12 px-6 backdrop-blur-sm">
-                    View Metro Map
+                    View Services
                   </Button>
                 </Link>
               </div>

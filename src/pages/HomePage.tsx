@@ -517,11 +517,78 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16">
+      {/* Download App CTA */}
+      <section className="py-20 bg-muted/40 border-y border-border/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+            <div>
+              <Badge variant="secondary" className="mb-3 bg-primary/10 text-primary">Mobile App</Badge>
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">JMRC Connect, in your pocket</h2>
+              <p className="text-muted-foreground mb-6 text-lg leading-relaxed">Get real-time alerts, scan QR tickets, and recharge your smart card on the go. Available soon for Android and iOS.</p>
+              <div className="flex flex-wrap gap-3">
+                <Button size="lg" className="bg-foreground text-background hover:bg-foreground/90 gap-3 h-14 px-6">
+                  <Apple className="w-6 h-6" />
+                  <div className="text-left leading-tight">
+                    <div className="text-[10px] opacity-70">Download on the</div>
+                    <div className="text-sm font-bold">App Store</div>
+                  </div>
+                </Button>
+                <Button size="lg" className="bg-foreground text-background hover:bg-foreground/90 gap-3 h-14 px-6">
+                  <PlayCircle className="w-6 h-6" />
+                  <div className="text-left leading-tight">
+                    <div className="text-[10px] opacity-70">Get it on</div>
+                    <div className="text-sm font-bold">Google Play</div>
+                  </div>
+                </Button>
+              </div>
+            </div>
+            <div className="flex justify-center">
+              <div className="relative">
+                <div className="absolute -inset-8 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-3xl" />
+                <div className="relative w-64 h-[480px] bg-gradient-to-br from-primary to-secondary rounded-[2.5rem] p-3 shadow-2xl border-8 border-foreground/90">
+                  <div className="w-full h-full bg-background rounded-[2rem] overflow-hidden p-5 flex flex-col">
+                    <div className="flex items-center justify-between mb-5">
+                      <div className="text-[10px] font-bold">9:41</div>
+                      <Smartphone className="w-3 h-3" />
+                    </div>
+                    <div className="text-xs font-bold text-primary mb-1">JMRC Connect</div>
+                    <h3 className="text-lg font-extrabold mb-4">Hello, Rider 👋</h3>
+                    <Card className="mb-3 bg-gradient-to-br from-primary to-secondary text-white border-0">
+                      <CardContent className="p-4">
+                        <div className="text-[10px] opacity-70 uppercase">Smart Card</div>
+                        <div className="text-xl font-extrabold mt-1">₹ 145</div>
+                        <div className="text-[10px] opacity-70 mt-1">4532 8890 ••••</div>
+                      </CardContent>
+                    </Card>
+                    <div className="grid grid-cols-2 gap-2 mb-3">
+                      <div className="aspect-square rounded-xl bg-accent/10 flex flex-col items-center justify-center text-accent">
+                        <Map className="w-5 h-5 mb-1" />
+                        <span className="text-[9px] font-semibold">Map</span>
+                      </div>
+                      <div className="aspect-square rounded-xl bg-primary/10 flex flex-col items-center justify-center text-primary">
+                        <Train className="w-5 h-5 mb-1" />
+                        <span className="text-[9px] font-semibold">Plan</span>
+                      </div>
+                    </div>
+                    <div className="text-[10px] font-semibold text-muted-foreground mb-2">Live Alerts</div>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-2 text-[10px] p-2 rounded-lg bg-success/10 text-success">
+                        <div className="w-1.5 h-1.5 rounded-full bg-success" /> All lines operational
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Citizen Support CTA */}
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-accent to-accent/80" />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary via-secondary to-accent" />
             <div className="relative text-center py-14 px-6">
               <Shield className="w-12 h-12 text-white/90 mx-auto mb-4" />
               <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">Have an issue? We're here to help.</h2>

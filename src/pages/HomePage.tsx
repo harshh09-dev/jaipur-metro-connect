@@ -197,28 +197,60 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Quick Services */}
-      <section className="py-16">
+      {/* Quick Access Services Grid */}
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-foreground mb-2">Smart Metro Services</h2>
-            <p className="text-muted-foreground">Everything you need for a seamless metro experience</p>
+          <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
+            <div>
+              <Badge variant="secondary" className="mb-3 bg-primary/10 text-primary hover:bg-primary/15">Quick Access</Badge>
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-2">Citizen Services</h2>
+              <p className="text-muted-foreground max-w-xl">All essential metro services available with a single tap — designed for daily commuters and tourists alike.</p>
+            </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            {quickLinks.map(link => {
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {quickAccess.map(link => {
               const Icon = link.icon;
               return (
-                <Link key={link.path} to={link.path} className="group">
-                  <Card className="h-full hover:shadow-lg hover:-translate-y-1 transition-all duration-200 border-border/50">
-                    <CardContent className="p-5 text-center">
-                      <div className={`w-12 h-12 ${link.color} rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform shadow-sm`}>
+                <Link key={link.label} to={link.path} className="group">
+                  <Card className="h-full hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-border/60 overflow-hidden relative">
+                    <CardContent className="p-6">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${link.tone} flex items-center justify-center mb-4 shadow-md group-hover:scale-110 transition-transform`}>
                         <Icon className="w-6 h-6 text-white" />
                       </div>
-                      <h3 className="font-semibold text-sm text-foreground mb-1">{link.label}</h3>
-                      <p className="text-xs text-muted-foreground leading-snug">{link.description}</p>
+                      <h3 className="font-semibold text-base text-foreground mb-1">{link.label}</h3>
+                      <div className="flex items-center gap-1 text-xs text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                        Open <ArrowRight className="w-3 h-3" />
+                      </div>
                     </CardContent>
                   </Card>
                 </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Why JMRC Connect */}
+      <section className="py-20 bg-muted/40 border-y border-border/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <Badge variant="secondary" className="mb-3 bg-accent/10 text-accent hover:bg-accent/15">Why JMRC Connect</Badge>
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-3">Built for the citizens of Jaipur</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">A modern, trusted platform that brings every metro service to your fingertips.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {whyJmrc.map(item => {
+              const Icon = item.icon;
+              return (
+                <Card key={item.title} className="p-2 hover:shadow-lg transition-all hover:-translate-y-1 bg-card/80 backdrop-blur-sm border-border/60">
+                  <CardContent className="p-6">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mb-5 shadow-md">
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="font-bold text-lg text-foreground mb-2">{item.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                  </CardContent>
+                </Card>
               );
             })}
           </div>

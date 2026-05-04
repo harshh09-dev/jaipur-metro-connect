@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Train, MapPin, Clock, MessageSquare, AlertTriangle, ArrowRight, Megaphone, Map, Search, ArrowRightLeft, Shield, Zap, CreditCard, Landmark, TreePine, ChevronRight, Users, Route, Building2, Calendar, Info } from "lucide-react";
+import { Train, MapPin, Clock, MessageSquare, AlertTriangle, ArrowRight, Megaphone, Map, Search, ArrowRightLeft, Shield, Zap, CreditCard, Landmark, TreePine, ChevronRight, Users, Route, Building2, Calendar, Info, Calculator, PackageSearch, BookOpen, Phone, Smartphone, Apple, PlayCircle, Sparkles, Headphones, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,13 +9,21 @@ import { serviceAlerts, announcements, allStations, pinkLineStations, calculateF
 import { touristSpots } from "@/data/tourist-data";
 import heroImage from "@/assets/hero-metro.jpg";
 
-const quickLinks = [
-  { path: "/journey-planner", label: "Journey Planner", description: "Plan route, check fare & time", icon: Train, color: "bg-secondary" },
-  { path: "/metro-map", label: "Metro Map", description: "Interactive network map", icon: Map, color: "bg-accent" },
-  { path: "/stations", label: "Stations", description: "Facilities & nearby places", icon: MapPin, color: "bg-success" },
-  { path: "/tourism", label: "Tourism", description: "Explore Jaipur via metro", icon: Landmark, color: "bg-info" },
-  { path: "/smart-card", label: "Smart Card", description: "Balance & recharge", icon: CreditCard, color: "bg-warning" },
-  { path: "/complaints", label: "File Complaint", description: "Report issues or feedback", icon: MessageSquare, color: "bg-metro-slate" },
+const quickAccess = [
+  { path: "/metro-map", label: "Route Map", icon: Map, tone: "from-primary to-secondary" },
+  { path: "/journey-planner", label: "Fare Calculator", icon: Calculator, tone: "from-accent to-emerald-500" },
+  { path: "/timings", label: "Train Timings", icon: Clock, tone: "from-amber-500 to-orange-500" },
+  { path: "/smart-card", label: "Smart Card", icon: CreditCard, tone: "from-violet-500 to-fuchsia-500" },
+  { path: "/complaints", label: "Complaint Portal", icon: MessageSquare, tone: "from-rose-500 to-pink-500" },
+  { path: "/complaints", label: "Lost & Found", icon: PackageSearch, tone: "from-cyan-500 to-sky-500" },
+  { path: "/announcements", label: "Metro Rules", icon: BookOpen, tone: "from-slate-600 to-slate-800" },
+  { path: "/alerts", label: "Helpline", icon: Phone, tone: "from-primary to-accent" },
+];
+
+const whyJmrc = [
+  { icon: Zap, title: "Fast Access", desc: "Plan journeys, check fares and recharge in seconds — no logins, no clutter." },
+  { icon: Bell, title: "Real-time Information", desc: "Live alerts, station updates and announcements from JMRC, all in one place." },
+  { icon: Headphones, title: "Citizen-first Support", desc: "File complaints, track status and reach the 24×7 helpline directly." },
 ];
 
 export default function HomePage() {
@@ -34,26 +42,26 @@ export default function HomePage() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative min-h-[600px] lg:min-h-[700px] flex items-center overflow-hidden">
+      <section className="relative min-h-[620px] lg:min-h-[720px] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img src={heroImage} alt="Jaipur Metro Station" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[hsl(212,100%,18%)]/95 via-[hsl(212,100%,22%)]/85 to-[hsl(212,100%,30%)]/55" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[hsl(212,100%,12%)]/70 via-transparent to-transparent" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in">
-              <div className="inline-flex items-center gap-2 bg-success/20 backdrop-blur-sm rounded-full px-4 py-1.5 mb-6 text-sm border border-success/30">
-                <div className="w-2 h-2 rounded-full bg-success animate-pulse-gentle" />
-                <span className="text-success-foreground font-medium">Pink Line operational</span>
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-1.5 mb-6 text-sm border border-white/20">
+                <Sparkles className="w-3.5 h-3.5 text-accent" />
+                <span className="text-white/90 font-medium tracking-wide">Official JMRC Citizen Platform</span>
               </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-5 leading-[1.1] tracking-tight text-white">
-                Your Daily Metro<br />
-                Companion for <span className="text-accent">Jaipur</span>
+              <h1 className="text-4xl sm:text-5xl lg:text-[3.75rem] font-extrabold mb-5 leading-[1.05] tracking-tight text-white">
+                Smart Metro Services<br />
+                for <span className="text-accent">Jaipur</span>
               </h1>
-              <p className="text-lg text-white/70 max-w-lg mb-8 leading-relaxed">
-                Plan routes, track trains, recharge smart cards, and explore the Pink City — powered by Jaipur Metro Rail Corporation since 2015.
+              <p className="text-lg text-white/75 max-w-xl mb-8 leading-relaxed">
+                Check routes, fares, timings, smart cards, complaints, updates, and citizen services — all in one place.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link to="/journey-planner">
@@ -61,9 +69,14 @@ export default function HomePage() {
                     Plan Journey <ArrowRight className="w-4 h-4" />
                   </Button>
                 </Link>
+                <Link to="/smart-card">
+                  <Button size="lg" className="bg-white text-primary hover:bg-white/90 text-base font-semibold gap-2 h-12 px-6 shadow-lg">
+                    <CreditCard className="w-4 h-4" /> Recharge Card
+                  </Button>
+                </Link>
                 <Link to="/metro-map">
                   <Button size="lg" variant="outline" className="text-base font-semibold border-white/30 text-white hover:bg-white/10 h-12 px-6 backdrop-blur-sm">
-                    View Metro Map
+                    View Services
                   </Button>
                 </Link>
               </div>
@@ -184,28 +197,60 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Quick Services */}
-      <section className="py-16">
+      {/* Quick Access Services Grid */}
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-foreground mb-2">Smart Metro Services</h2>
-            <p className="text-muted-foreground">Everything you need for a seamless metro experience</p>
+          <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
+            <div>
+              <Badge variant="secondary" className="mb-3 bg-primary/10 text-primary hover:bg-primary/15">Quick Access</Badge>
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-2">Citizen Services</h2>
+              <p className="text-muted-foreground max-w-xl">All essential metro services available with a single tap — designed for daily commuters and tourists alike.</p>
+            </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            {quickLinks.map(link => {
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {quickAccess.map(link => {
               const Icon = link.icon;
               return (
-                <Link key={link.path} to={link.path} className="group">
-                  <Card className="h-full hover:shadow-lg hover:-translate-y-1 transition-all duration-200 border-border/50">
-                    <CardContent className="p-5 text-center">
-                      <div className={`w-12 h-12 ${link.color} rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform shadow-sm`}>
+                <Link key={link.label} to={link.path} className="group">
+                  <Card className="h-full hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-border/60 overflow-hidden relative">
+                    <CardContent className="p-6">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${link.tone} flex items-center justify-center mb-4 shadow-md group-hover:scale-110 transition-transform`}>
                         <Icon className="w-6 h-6 text-white" />
                       </div>
-                      <h3 className="font-semibold text-sm text-foreground mb-1">{link.label}</h3>
-                      <p className="text-xs text-muted-foreground leading-snug">{link.description}</p>
+                      <h3 className="font-semibold text-base text-foreground mb-1">{link.label}</h3>
+                      <div className="flex items-center gap-1 text-xs text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                        Open <ArrowRight className="w-3 h-3" />
+                      </div>
                     </CardContent>
                   </Card>
                 </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Why JMRC Connect */}
+      <section className="py-20 bg-muted/40 border-y border-border/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <Badge variant="secondary" className="mb-3 bg-accent/10 text-accent hover:bg-accent/15">Why JMRC Connect</Badge>
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-3">Built for the citizens of Jaipur</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">A modern, trusted platform that brings every metro service to your fingertips.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {whyJmrc.map(item => {
+              const Icon = item.icon;
+              return (
+                <Card key={item.title} className="p-2 hover:shadow-lg transition-all hover:-translate-y-1 bg-card/80 backdrop-blur-sm border-border/60">
+                  <CardContent className="p-6">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mb-5 shadow-md">
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="font-bold text-lg text-foreground mb-2">{item.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                  </CardContent>
+                </Card>
               );
             })}
           </div>
@@ -472,11 +517,78 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16">
+      {/* Download App CTA */}
+      <section className="py-20 bg-muted/40 border-y border-border/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+            <div>
+              <Badge variant="secondary" className="mb-3 bg-primary/10 text-primary">Mobile App</Badge>
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">JMRC Connect, in your pocket</h2>
+              <p className="text-muted-foreground mb-6 text-lg leading-relaxed">Get real-time alerts, scan QR tickets, and recharge your smart card on the go. Available soon for Android and iOS.</p>
+              <div className="flex flex-wrap gap-3">
+                <Button size="lg" className="bg-foreground text-background hover:bg-foreground/90 gap-3 h-14 px-6">
+                  <Apple className="w-6 h-6" />
+                  <div className="text-left leading-tight">
+                    <div className="text-[10px] opacity-70">Download on the</div>
+                    <div className="text-sm font-bold">App Store</div>
+                  </div>
+                </Button>
+                <Button size="lg" className="bg-foreground text-background hover:bg-foreground/90 gap-3 h-14 px-6">
+                  <PlayCircle className="w-6 h-6" />
+                  <div className="text-left leading-tight">
+                    <div className="text-[10px] opacity-70">Get it on</div>
+                    <div className="text-sm font-bold">Google Play</div>
+                  </div>
+                </Button>
+              </div>
+            </div>
+            <div className="flex justify-center">
+              <div className="relative">
+                <div className="absolute -inset-8 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-3xl" />
+                <div className="relative w-64 h-[480px] bg-gradient-to-br from-primary to-secondary rounded-[2.5rem] p-3 shadow-2xl border-8 border-foreground/90">
+                  <div className="w-full h-full bg-background rounded-[2rem] overflow-hidden p-5 flex flex-col">
+                    <div className="flex items-center justify-between mb-5">
+                      <div className="text-[10px] font-bold">9:41</div>
+                      <Smartphone className="w-3 h-3" />
+                    </div>
+                    <div className="text-xs font-bold text-primary mb-1">JMRC Connect</div>
+                    <h3 className="text-lg font-extrabold mb-4">Hello, Rider 👋</h3>
+                    <Card className="mb-3 bg-gradient-to-br from-primary to-secondary text-white border-0">
+                      <CardContent className="p-4">
+                        <div className="text-[10px] opacity-70 uppercase">Smart Card</div>
+                        <div className="text-xl font-extrabold mt-1">₹ 145</div>
+                        <div className="text-[10px] opacity-70 mt-1">4532 8890 ••••</div>
+                      </CardContent>
+                    </Card>
+                    <div className="grid grid-cols-2 gap-2 mb-3">
+                      <div className="aspect-square rounded-xl bg-accent/10 flex flex-col items-center justify-center text-accent">
+                        <Map className="w-5 h-5 mb-1" />
+                        <span className="text-[9px] font-semibold">Map</span>
+                      </div>
+                      <div className="aspect-square rounded-xl bg-primary/10 flex flex-col items-center justify-center text-primary">
+                        <Train className="w-5 h-5 mb-1" />
+                        <span className="text-[9px] font-semibold">Plan</span>
+                      </div>
+                    </div>
+                    <div className="text-[10px] font-semibold text-muted-foreground mb-2">Live Alerts</div>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-2 text-[10px] p-2 rounded-lg bg-success/10 text-success">
+                        <div className="w-1.5 h-1.5 rounded-full bg-success" /> All lines operational
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Citizen Support CTA */}
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-accent to-accent/80" />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary via-secondary to-accent" />
             <div className="relative text-center py-14 px-6">
               <Shield className="w-12 h-12 text-white/90 mx-auto mb-4" />
               <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">Have an issue? We're here to help.</h2>

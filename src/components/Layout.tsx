@@ -23,13 +23,12 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import jmrcLogo from "@/assets/jmrc-logo.png";
 
 const navItems = [
-  { path: "/journey-planner", label: "Journey Planner", icon: Train },
-  { path: "/metro-map", label: "Metro Map", icon: Map },
-  { path: "/stations", label: "Stations", icon: MapPin },
-  { path: "/tourism", label: "Tourism", icon: MapPin },
-  { path: "/smart-card", label: "Smart Card", icon: Train },
-  { path: "/complaints", label: "Complaints", icon: MessageSquare },
-  { path: "/alerts", label: "Alerts", icon: AlertTriangle },
+  { path: "/", label: "Home", icon: Train },
+  { path: "/journey-planner", label: "Services", icon: Train },
+  { path: "/metro-map", label: "Routes", icon: Map },
+  { path: "/complaints", label: "Support", icon: MessageSquare },
+  { path: "/announcements", label: "About", icon: Megaphone },
+  { path: "/alerts", label: "Contact", icon: Phone },
 ];
 
 export function Header() {
@@ -37,14 +36,16 @@ export function Header() {
   const location = useLocation();
 
   return (
-    <header className="sticky top-0 z-50 bg-primary/95 backdrop-blur-md border-b border-primary-foreground/10">
+    <header className="sticky top-0 z-50 bg-background/85 backdrop-blur-xl border-b border-border/70 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-3 group">
-            <img src={jmrcLogo} alt="JMRC Logo" className="w-9 h-9 object-contain" />
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-md">
+              <img src={jmrcLogo} alt="JMRC Logo" className="w-7 h-7 object-contain" />
+            </div>
             <div>
-              <h1 className="text-primary-foreground text-base font-bold leading-none">JMRC</h1>
-              <p className="text-primary-foreground/60 text-[10px] font-medium tracking-wider uppercase">Jaipur Metro</p>
+              <h1 className="text-foreground text-base font-extrabold leading-none tracking-tight">JMRC <span className="text-primary">Connect</span></h1>
+              <p className="text-muted-foreground text-[10px] font-medium tracking-[0.15em] uppercase">Smart Metro Services</p>
             </div>
           </Link>
 
@@ -54,10 +55,10 @@ export function Header() {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-all ${
                   location.pathname === item.path
-                    ? "bg-primary-foreground/15 text-primary-foreground"
-                    : "text-primary-foreground/70 hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                    ? "bg-primary/10 text-primary"
+                    : "text-foreground/70 hover:bg-muted hover:text-foreground"
                 }`}
               >
                 {item.label}
@@ -68,13 +69,13 @@ export function Header() {
           <div className="hidden lg:flex items-center gap-2">
             <ThemeToggle />
             <Link to="/track-complaint">
-              <Button variant="ghost" size="sm" className="text-primary-foreground/70 hover:text-primary-foreground hover:bg-primary-foreground/10 gap-1.5">
+              <Button variant="ghost" size="sm" className="text-foreground/70 hover:text-foreground hover:bg-muted gap-1.5">
                 <Search className="w-4 h-4" />
                 Track
               </Button>
             </Link>
             <Link to="/admin">
-              <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90 gap-1.5">
+              <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5 shadow-md shadow-primary/20">
                 Admin
               </Button>
             </Link>
@@ -83,7 +84,7 @@ export function Header() {
           {/* Mobile toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden p-2 rounded-lg text-primary-foreground hover:bg-primary-foreground/10"
+            className="lg:hidden p-2 rounded-lg text-foreground hover:bg-muted"
             aria-label="Toggle menu"
           >
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -93,19 +94,8 @@ export function Header() {
 
       {/* Mobile nav */}
       {mobileOpen && (
-        <div className="lg:hidden bg-primary border-t border-primary-foreground/10 animate-fade-in">
+        <div className="lg:hidden bg-background border-t border-border animate-fade-in">
           <nav className="px-4 py-3 space-y-1">
-            <Link
-              to="/"
-              onClick={() => setMobileOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                location.pathname === "/"
-                  ? "bg-primary-foreground/15 text-primary-foreground"
-                  : "text-primary-foreground/70 hover:bg-primary-foreground/10"
-              }`}
-            >
-              Home
-            </Link>
             {navItems.map(item => {
               const Icon = item.icon;
               return (
@@ -115,8 +105,8 @@ export function Header() {
                   onClick={() => setMobileOpen(false)}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                     location.pathname === item.path
-                      ? "bg-primary-foreground/15 text-primary-foreground"
-                      : "text-primary-foreground/70 hover:bg-primary-foreground/10"
+                      ? "bg-primary/10 text-primary"
+                      : "text-foreground/80 hover:bg-muted"
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -124,14 +114,11 @@ export function Header() {
                 </Link>
               );
             })}
-            <div className="pt-2 border-t border-primary-foreground/10 space-y-1">
-              <Link to="/track-complaint" onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-primary-foreground/70 hover:bg-primary-foreground/10">
+            <div className="pt-2 border-t border-border space-y-1">
+              <Link to="/track-complaint" onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-foreground/80 hover:bg-muted">
                 <Search className="w-4 h-4" /> Track Complaint
               </Link>
-              <Link to="/announcements" onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-primary-foreground/70 hover:bg-primary-foreground/10">
-                <Megaphone className="w-4 h-4" /> Announcements
-              </Link>
-              <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-accent text-accent-foreground mt-2">
+              <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-primary text-primary-foreground mt-2">
                 Admin Dashboard
               </Link>
             </div>

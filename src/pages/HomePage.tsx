@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Train, MapPin, Clock, MessageSquare, AlertTriangle, ArrowRight, Megaphone, Map, Search, ArrowRightLeft, Shield, Zap, CreditCard, Landmark, TreePine, ChevronRight, Users, Route, Building2, Calendar, Info } from "lucide-react";
+import { Train, MapPin, Clock, MessageSquare, AlertTriangle, ArrowRight, Megaphone, Map, Search, ArrowRightLeft, Shield, Zap, CreditCard, Landmark, TreePine, ChevronRight, Users, Route, Building2, Calendar, Info, Calculator, PackageSearch, BookOpen, Phone, Smartphone, Apple, PlayCircle, Sparkles, Headphones, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,13 +9,21 @@ import { serviceAlerts, announcements, allStations, pinkLineStations, calculateF
 import { touristSpots } from "@/data/tourist-data";
 import heroImage from "@/assets/hero-metro.jpg";
 
-const quickLinks = [
-  { path: "/journey-planner", label: "Journey Planner", description: "Plan route, check fare & time", icon: Train, color: "bg-secondary" },
-  { path: "/metro-map", label: "Metro Map", description: "Interactive network map", icon: Map, color: "bg-accent" },
-  { path: "/stations", label: "Stations", description: "Facilities & nearby places", icon: MapPin, color: "bg-success" },
-  { path: "/tourism", label: "Tourism", description: "Explore Jaipur via metro", icon: Landmark, color: "bg-info" },
-  { path: "/smart-card", label: "Smart Card", description: "Balance & recharge", icon: CreditCard, color: "bg-warning" },
-  { path: "/complaints", label: "File Complaint", description: "Report issues or feedback", icon: MessageSquare, color: "bg-metro-slate" },
+const quickAccess = [
+  { path: "/metro-map", label: "Route Map", icon: Map, tone: "from-primary to-secondary" },
+  { path: "/journey-planner", label: "Fare Calculator", icon: Calculator, tone: "from-accent to-emerald-500" },
+  { path: "/timings", label: "Train Timings", icon: Clock, tone: "from-amber-500 to-orange-500" },
+  { path: "/smart-card", label: "Smart Card", icon: CreditCard, tone: "from-violet-500 to-fuchsia-500" },
+  { path: "/complaints", label: "Complaint Portal", icon: MessageSquare, tone: "from-rose-500 to-pink-500" },
+  { path: "/complaints", label: "Lost & Found", icon: PackageSearch, tone: "from-cyan-500 to-sky-500" },
+  { path: "/announcements", label: "Metro Rules", icon: BookOpen, tone: "from-slate-600 to-slate-800" },
+  { path: "/alerts", label: "Helpline", icon: Phone, tone: "from-primary to-accent" },
+];
+
+const whyJmrc = [
+  { icon: Zap, title: "Fast Access", desc: "Plan journeys, check fares and recharge in seconds — no logins, no clutter." },
+  { icon: Bell, title: "Real-time Information", desc: "Live alerts, station updates and announcements from JMRC, all in one place." },
+  { icon: Headphones, title: "Citizen-first Support", desc: "File complaints, track status and reach the 24×7 helpline directly." },
 ];
 
 export default function HomePage() {

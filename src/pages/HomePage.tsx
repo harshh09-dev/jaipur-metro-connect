@@ -42,142 +42,44 @@ export default function HomePage() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative min-h-[620px] lg:min-h-[720px] flex items-center overflow-hidden">
+      <section className="relative h-[420px] sm:h-[520px] lg:h-[620px] flex items-center overflow-hidden mx-3 sm:mx-4 mt-4 rounded-3xl">
         <div className="absolute inset-0">
           <img src={heroImage} alt="Jaipur Metro Station" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[hsl(212,100%,18%)]/95 via-[hsl(212,100%,22%)]/85 to-[hsl(212,100%,30%)]/55" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[hsl(212,100%,12%)]/70 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[hsl(210,70%,12%)]/90 via-[hsl(210,70%,15%)]/60 to-transparent" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="animate-fade-in">
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-4 py-1.5 mb-6 text-sm border border-white/20">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 lg:px-14 w-full">
+          <div className="max-w-2xl animate-fade-in">
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-3 py-1 mb-5 text-xs border border-white/20">
                 <Sparkles className="w-3.5 h-3.5 text-accent" />
-                <span className="text-white/90 font-medium tracking-wide">Official JMRC Citizen Platform</span>
+                <span className="text-white/90 font-medium tracking-wide">Official JMRC Platform</span>
               </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-[3.75rem] font-extrabold mb-5 leading-[1.05] tracking-tight text-white">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-4 leading-[1.1] tracking-tight text-white">
                 Smart Metro Services<br />
-                for <span className="text-accent">Jaipur</span>
+                for <span className="text-[hsl(35,60%,82%)]">Jaipur</span>
               </h1>
-              <p className="text-lg text-white/75 max-w-xl mb-8 leading-relaxed">
-                Check routes, fares, timings, smart cards, complaints, updates, and citizen services — all in one place.
+              <p className="text-base sm:text-lg text-white/80 max-w-xl mb-7 leading-relaxed">
+                Plan journeys, recharge smart cards, explore Jaipur, and manage metro services seamlessly.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link to="/journey-planner">
-                  <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 text-base font-semibold gap-2 h-12 px-6 shadow-lg shadow-accent/30">
+                  <Button size="lg" className="bg-primary text-primary-foreground hover:bg-[hsl(210,65%,30%)] text-sm sm:text-base font-semibold gap-2 h-11 sm:h-12 px-5 sm:px-6 rounded-full shadow-lg">
                     Plan Journey <ArrowRight className="w-4 h-4" />
                   </Button>
                 </Link>
-                <Link to="/smart-card">
-                  <Button size="lg" className="bg-white text-primary hover:bg-white/90 text-base font-semibold gap-2 h-12 px-6 shadow-lg">
-                    <CreditCard className="w-4 h-4" /> Recharge Card
-                  </Button>
-                </Link>
                 <Link to="/metro-map">
-                  <Button size="lg" variant="outline" className="text-base font-semibold border-white/30 text-white hover:bg-white/10 h-12 px-6 backdrop-blur-sm">
-                    View Services
+                  <Button size="lg" variant="outline" className="text-sm sm:text-base font-semibold border-white/40 bg-white/5 text-white hover:bg-white/15 h-11 sm:h-12 px-5 sm:px-6 rounded-full backdrop-blur-sm">
+                    Get Started
                   </Button>
                 </Link>
               </div>
-
-              {/* Real stats from Wikipedia */}
-              <div className="flex items-center gap-6 mt-10 pt-6 border-t border-white/10">
-                {[
-                  { icon: Users, value: "55K+", label: "Daily Riders" },
-                  { icon: Route, value: "11.97 km", label: "Network" },
-                  { icon: Train, value: "11", label: "Stations" },
-                ].map(item => (
-                  <div key={item.label} className="flex items-center gap-2">
-                    <item.icon className="w-4 h-4 text-accent" />
-                    <div>
-                      <span className="text-white font-bold text-sm">{item.value}</span>
-                      <span className="text-white/50 text-xs ml-1">{item.label}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
             </div>
-
-            {/* Quick Route Finder */}
-            <div className="animate-slide-in-right">
-              <Card className="bg-card/95 backdrop-blur-xl border-border/50 shadow-2xl">
-                <CardContent className="p-6">
-                  <h3 className="text-foreground font-semibold text-lg mb-4 flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
-                      <Train className="w-4 h-4 text-accent-foreground" />
-                    </div>
-                    Quick Route Finder
-                  </h3>
-                  <div className="space-y-3">
-                    <div>
-                      <label className="text-xs text-muted-foreground font-medium mb-1.5 block uppercase tracking-wider">From</label>
-                      <Select value={source} onValueChange={setSource}>
-                        <SelectTrigger className="h-11">
-                          <SelectValue placeholder="Select source station" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {allStations.map(s => (
-                            <SelectItem key={s.id} value={s.id}>{s.name} <span className="text-muted-foreground ml-1">({s.line === "pink" ? "Pink" : "Orange"})</span></SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="flex justify-center">
-                      <button
-                        onClick={() => { setSource(destination); setDestination(source); }}
-                        className="p-2 rounded-full bg-muted hover:bg-muted/80 transition-colors border border-border"
-                      >
-                        <ArrowRightLeft className="w-4 h-4 text-muted-foreground" />
-                      </button>
-                    </div>
-                    <div>
-                      <label className="text-xs text-muted-foreground font-medium mb-1.5 block uppercase tracking-wider">To</label>
-                      <Select value={destination} onValueChange={setDestination}>
-                        <SelectTrigger className="h-11">
-                          <SelectValue placeholder="Select destination station" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {allStations.map(s => (
-                            <SelectItem key={s.id} value={s.id}>{s.name} <span className="text-muted-foreground ml-1">({s.line === "pink" ? "Pink" : "Orange"})</span></SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {result && (
-                      <div className="grid grid-cols-3 gap-3 pt-3 border-t border-border">
-                        <div className="text-center p-3 rounded-lg bg-accent/10">
-                          <div className="text-2xl font-bold text-accent">₹{result.fare}</div>
-                          <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Fare</div>
-                        </div>
-                        <div className="text-center p-3 rounded-lg bg-muted">
-                          <div className="text-2xl font-bold text-foreground">{result.stations}</div>
-                          <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Stations</div>
-                        </div>
-                        <div className="text-center p-3 rounded-lg bg-muted">
-                          <div className="text-2xl font-bold text-foreground">{result.time}m</div>
-                          <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Time</div>
-                        </div>
-                      </div>
-                    )}
-
-                    <Link to="/journey-planner" className="block">
-                      <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90 gap-2 h-11 text-base shadow-md">
-                        View Full Route <ArrowRight className="w-4 h-4" />
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
         </div>
       </section>
 
       {/* Active Alerts Banner */}
       {activeAlerts.length > 0 && (
-        <section className="bg-warning/10 border-b border-warning/20">
+        <section className="bg-warning/10 border-y border-warning/20 mt-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-warning/20 flex items-center justify-center shrink-0">
@@ -197,30 +99,24 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Quick Access Services Grid */}
-      <section className="py-20">
+      {/* Quick Access Cards */}
+      <section className="py-12 sm:py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
-            <div>
-              <Badge variant="secondary" className="mb-3 bg-primary/10 text-primary hover:bg-primary/15">Quick Access</Badge>
-              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-2">Citizen Services</h2>
-              <p className="text-muted-foreground max-w-xl">All essential metro services available with a single tap — designed for daily commuters and tourists alike.</p>
-            </div>
+          <div className="mb-8 sm:mb-10">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground mb-1">Quick Access</h2>
+            <p className="text-sm text-muted-foreground">Essential metro services, one tap away.</p>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {quickAccess.map(link => {
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+            {quickAccess.slice(0, 6).map(link => {
               const Icon = link.icon;
               return (
                 <Link key={link.label} to={link.path} className="group">
-                  <Card className="h-full hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-border/60 overflow-hidden relative">
-                    <CardContent className="p-6">
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${link.tone} flex items-center justify-center mb-4 shadow-md group-hover:scale-110 transition-transform`}>
-                        <Icon className="w-6 h-6 text-white" />
+                  <Card className="h-full bg-card hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 border border-border rounded-2xl">
+                    <CardContent className="p-4 sm:p-5 flex flex-col items-center text-center gap-3">
+                      <div className="w-11 h-11 rounded-xl bg-secondary flex items-center justify-center">
+                        <Icon className="w-5 h-5 text-primary" />
                       </div>
-                      <h3 className="font-semibold text-base text-foreground mb-1">{link.label}</h3>
-                      <div className="flex items-center gap-1 text-xs text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                        Open <ArrowRight className="w-3 h-3" />
-                      </div>
+                      <h3 className="font-semibold text-sm text-foreground leading-tight">{link.label}</h3>
                     </CardContent>
                   </Card>
                 </Link>
@@ -230,24 +126,81 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Why JMRC Connect */}
-      <section className="py-20 bg-muted/40 border-y border-border/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <Badge variant="secondary" className="mb-3 bg-accent/10 text-accent hover:bg-accent/15">Why JMRC Connect</Badge>
-            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-3">Built for the citizens of Jaipur</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">A modern, trusted platform that brings every metro service to your fingertips.</p>
+      {/* Quick Route Finder */}
+      <section className="py-12 sm:py-16 lg:py-20 bg-secondary/60 border-y border-border">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground mb-2">Plan Your Journey</h2>
+            <p className="text-sm text-muted-foreground">Find fares, time and stations between any two metro stops.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card className="bg-card border-border shadow-md rounded-2xl">
+            <CardContent className="p-5 sm:p-7">
+              <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] gap-3 sm:gap-4 items-end">
+                <div>
+                  <label className="text-[11px] text-muted-foreground font-medium mb-1.5 block uppercase tracking-wider">From</label>
+                  <Select value={source} onValueChange={setSource}>
+                    <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Source station" /></SelectTrigger>
+                    <SelectContent>
+                      {allStations.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <button onClick={() => { setSource(destination); setDestination(source); }} className="hidden sm:flex h-11 w-11 mx-auto items-center justify-center rounded-full bg-secondary hover:bg-secondary/70 border border-border transition-colors">
+                  <ArrowRightLeft className="w-4 h-4 text-primary" />
+                </button>
+                <div>
+                  <label className="text-[11px] text-muted-foreground font-medium mb-1.5 block uppercase tracking-wider">To</label>
+                  <Select value={destination} onValueChange={setDestination}>
+                    <SelectTrigger className="h-11 rounded-xl"><SelectValue placeholder="Destination station" /></SelectTrigger>
+                    <SelectContent>
+                      {allStations.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              {result && (
+                <div className="grid grid-cols-3 gap-3 pt-5 mt-5 border-t border-border">
+                  <div className="text-center p-3 rounded-xl bg-secondary/60">
+                    <div className="text-xl sm:text-2xl font-bold text-primary">₹{result.fare}</div>
+                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider mt-0.5">Fare</div>
+                  </div>
+                  <div className="text-center p-3 rounded-xl bg-secondary/60">
+                    <div className="text-xl sm:text-2xl font-bold text-foreground">{result.stations}</div>
+                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider mt-0.5">Stations</div>
+                  </div>
+                  <div className="text-center p-3 rounded-xl bg-secondary/60">
+                    <div className="text-xl sm:text-2xl font-bold text-foreground">{result.time}m</div>
+                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider mt-0.5">Time</div>
+                  </div>
+                </div>
+              )}
+              <Link to="/journey-planner" className="block mt-5">
+                <Button className="w-full rounded-full bg-primary text-primary-foreground hover:bg-[hsl(210,65%,30%)] h-11 gap-2">
+                  View Full Route <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Why JMRC Connect */}
+      <section className="py-12 sm:py-16 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground mb-2">Built for the citizens of Jaipur</h2>
+            <p className="text-sm text-muted-foreground max-w-xl mx-auto">A modern, trusted platform that brings every metro service to your fingertips.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             {whyJmrc.map(item => {
               const Icon = item.icon;
               return (
-                <Card key={item.title} className="p-2 hover:shadow-lg transition-all hover:-translate-y-1 bg-card/80 backdrop-blur-sm border-border/60">
+                <Card key={item.title} className="bg-card border border-border rounded-2xl hover:shadow-md transition-all">
                   <CardContent className="p-6">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mb-5 shadow-md">
-                      <Icon className="w-6 h-6 text-white" />
+                    <div className="w-11 h-11 rounded-xl bg-secondary flex items-center justify-center mb-4">
+                      <Icon className="w-5 h-5 text-primary" />
                     </div>
-                    <h3 className="font-bold text-lg text-foreground mb-2">{item.title}</h3>
+                    <h3 className="font-bold text-base text-foreground mb-1.5">{item.title}</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
                   </CardContent>
                 </Card>

@@ -41,39 +41,44 @@ export default function SmartCardPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero */}
-      <section className="metro-gradient text-primary-foreground py-12 sm:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl sm:text-4xl font-extrabold mb-2">Smart Card Services</h1>
-          <p className="text-primary-foreground/70 text-lg">Check balance, recharge your card, and view transaction history.</p>
+      <section className="bg-secondary/60 border-b border-border py-10 sm:py-14">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-foreground mb-2">Smart Card Services</h1>
+          <p className="text-muted-foreground text-base">Check balance, recharge and view transactions.</p>
         </div>
       </section>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Card Visual */}
-        <div className="mb-8">
-          <div className="relative bg-gradient-to-br from-primary via-primary to-secondary/80 rounded-2xl p-6 sm:p-8 text-primary-foreground max-w-md mx-auto shadow-xl">
-            <div className="absolute top-4 right-4">
-              <CreditCard className="w-8 h-8 text-primary-foreground/30" />
-            </div>
-            <p className="text-xs text-primary-foreground/50 uppercase tracking-widest mb-1">JMRC Smart Card</p>
-            <p className="text-xl sm:text-2xl font-mono font-bold tracking-wider mb-4">{card.cardNumber}</p>
-            <div className="flex items-end justify-between">
-              <div>
-                <p className="text-xs text-primary-foreground/50 mb-0.5">Card Holder</p>
-                <p className="text-sm font-semibold">{card.holderName}</p>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+        {/* Realistic Smart Card */}
+        <div className="mb-10 flex justify-center">
+          <div className="relative w-full max-w-md">
+            <div className="absolute -inset-6 bg-primary/15 rounded-3xl blur-2xl" />
+            <div className="relative aspect-[1.586/1] bg-gradient-to-br from-[hsl(210,70%,18%)] via-primary to-[hsl(210,70%,30%)] rounded-2xl p-6 text-white shadow-2xl border border-white/10 overflow-hidden">
+              <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full" />
+              <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-white/5 rounded-full" />
+              <div className="relative flex items-center justify-between mb-6">
+                <p className="text-[10px] text-white/60 uppercase tracking-[0.2em] font-medium">JMRC Smart Card</p>
+                <Badge className="bg-success/20 text-success border-success/30 text-[10px] backdrop-blur-sm">{card.status}</Badge>
               </div>
-              <div className="text-right">
-                <p className="text-xs text-primary-foreground/50 mb-0.5">Balance</p>
-                <p className="text-2xl font-extrabold">₹{card.balance}</p>
+              <div className="relative w-10 h-7 bg-gradient-to-br from-warning to-warning/70 rounded-md mb-5 shadow-inner" />
+              <p className="relative text-lg sm:text-xl font-mono font-bold tracking-[0.18em] mb-1">{card.cardNumber}</p>
+              <p className="relative text-[10px] text-white/50 uppercase tracking-wider mb-5">Valid Thru 12/29</p>
+              <div className="relative flex items-end justify-between">
+                <div>
+                  <p className="text-[10px] text-white/50 uppercase tracking-wider">Card Holder</p>
+                  <p className="text-sm font-semibold tracking-wide">{card.holderName}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] text-white/50 uppercase tracking-wider">Balance</p>
+                  <p className="text-xl font-extrabold">₹ {card.balance}</p>
+                </div>
               </div>
             </div>
-            <Badge className="absolute bottom-4 right-4 bg-success/20 text-success border-success/30 text-[10px]">{card.status}</Badge>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-6 justify-center">
+        <div className="flex gap-2 mb-6 justify-center flex-wrap">
           {tabs.map(tab => {
             const Icon = tab.icon;
             return (
@@ -81,7 +86,7 @@ export default function SmartCardPage() {
                 key={tab.id}
                 variant={activeTab === tab.id ? "default" : "outline"}
                 onClick={() => { setActiveTab(tab.id); setRechargeSuccess(null); }}
-                className="gap-2"
+                className={`gap-2 rounded-full ${activeTab === tab.id ? "bg-primary text-primary-foreground hover:bg-[hsl(210,65%,30%)]" : ""}`}
               >
                 <Icon className="w-4 h-4" /> {tab.label}
               </Button>

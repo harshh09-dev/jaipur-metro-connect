@@ -67,6 +67,7 @@ export default {
           red: "hsl(var(--metro-red))",
           navy: "hsl(var(--metro-navy))",
           blue: "hsl(var(--metro-blue))",
+          sand: "hsl(var(--metro-sand))",
           slate: "hsl(var(--metro-slate))",
         },
         sidebar: {

@@ -21,8 +21,8 @@ const TX_KEY = "jmrc_transactions";
 
 function getDefaultCard(): SmartCard {
   return {
-    cardNumber: "4532 8890 1234",
-    holderName: "Metro Passenger",
+    cardNumber: "4532 8890 •••• 7821",
+    holderName: "ANJALI KAMAL",
     balance: 145,
     lastRecharge: "2026-03-05",
     status: "Active",

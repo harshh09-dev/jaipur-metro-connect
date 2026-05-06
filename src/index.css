@@ -7,37 +7,41 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222 32% 12%;
+    /* Ivory base */
+    --background: 36 43% 98%;
+    --foreground: 217 33% 17%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 32% 12%;
+    --card-foreground: 217 33% 17%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 32% 12%;
+    --popover-foreground: 217 33% 17%;
 
-    --primary: 212 100% 36%;
-    --primary-foreground: 0 0% 100%;
+    /* Deep Metro Blue #123B63 */
+    --primary: 210 70% 23%;
+    --primary-foreground: 36 43% 98%;
 
-    --secondary: 212 95% 48%;
-    --secondary-foreground: 0 0% 100%;
+    /* Warm Jaipur Sand #F5E9D8 */
+    --secondary: 35 60% 90%;
+    --secondary-foreground: 210 70% 23%;
 
-    --muted: 210 25% 96%;
-    --muted-foreground: 215 16% 42%;
+    --muted: 35 35% 94%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 168 100% 36%;
+    /* Success-green accent #2E8B57 */
+    --accent: 146 50% 36%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 25% 90%;
-    --input: 214 25% 90%;
-    --ring: 212 100% 36%;
+    --border: 20 6% 90%;
+    --input: 20 6% 90%;
+    --ring: 210 70% 23%;
 
     --radius: 0.75rem;
 
-    --success: 160 84% 39%;
+    --success: 146 50% 36%;
     --success-foreground: 0 0% 100%;
 
     --warning: 43 96% 56%;
@@ -47,8 +51,9 @@
     --info-foreground: 0 0% 100%;
 
     --metro-red: 347 77% 50%;
-    --metro-navy: 212 100% 18%;
-    --metro-blue: 212 100% 36%;
+    --metro-navy: 210 70% 18%;
+    --metro-blue: 210 70% 23%;
+    --metro-sand: 35 60% 90%;
     --metro-slate: 215 16% 47%;
 
     --sidebar-background: 222 47% 11%;

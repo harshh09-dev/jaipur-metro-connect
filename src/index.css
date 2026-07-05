@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,41 +6,41 @@
 
 @layer base {
   :root {
-    /* Ivory base */
-    --background: 36 43% 98%;
-    --foreground: 217 33% 17%;
+    /* Premium slate/white base */
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 217 33% 17%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 217 33% 17%;
+    --popover-foreground: 222 47% 11%;
 
-    /* Deep Metro Blue #123B63 */
+    /* JMRC Deep Blue #123B63 */
     --primary: 210 70% 23%;
-    --primary-foreground: 36 43% 98%;
+    --primary-foreground: 210 40% 98%;
 
-    /* Warm Jaipur Sand #F5E9D8 */
-    --secondary: 35 60% 90%;
-    --secondary-foreground: 210 70% 23%;
+    /* Secondary Blue #2563EB */
+    --secondary: 217 91% 60%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 35 35% 94%;
+    --muted: 210 40% 96%;
     --muted-foreground: 215 16% 47%;
 
-    /* Success-green accent #2E8B57 */
-    --accent: 146 50% 36%;
+    /* Accent Sky #0EA5E9 */
+    --accent: 199 89% 48%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 20 6% 90%;
-    --input: 20 6% 90%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
     --ring: 210 70% 23%;
 
-    --radius: 0.75rem;
+    --radius: 1.25rem;
 
-    --success: 146 50% 36%;
+    --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
 
     --warning: 43 96% 56%;
@@ -53,7 +52,7 @@
     --metro-red: 347 77% 50%;
     --metro-navy: 210 70% 18%;
     --metro-blue: 210 70% 23%;
-    --metro-sand: 35 60% 90%;
+    --metro-sand: 210 40% 96%;
     --metro-slate: 215 16% 47%;
 
     --sidebar-background: 222 47% 11%;

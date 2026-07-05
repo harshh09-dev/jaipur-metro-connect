@@ -1,173 +1,100 @@
-import { useState } from "react";
-import { trackComplaint, type Complaint } from "@/data/metro-data";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/context/AuthContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Search, Clock, User, MapPin, AlertTriangle, CheckCircle, CircleDot, Shield } from "lucide-react";
+import { Search, Loader2, MessageSquare } from "lucide-react";
 
-const statusConfig: Record<string, { color: string; icon: typeof CheckCircle }> = {
-  "Submitted": { color: "bg-info/10 text-info border-info/20", icon: CircleDot },
-  "Under Review": { color: "bg-warning/10 text-warning border-warning/20", icon: Clock },
-  "In Progress": { color: "bg-secondary/10 text-secondary border-secondary/20", icon: CircleDot },
-  "Resolved": { color: "bg-success/10 text-success border-success/20", icon: CheckCircle },
-  "Closed": { color: "bg-muted text-muted-foreground border-border", icon: CheckCircle },
+interface Complaint { id: string; reference: string; category: string; subject: string; description: string; station: string | null; status: string; admin_response: string | null; created_at: string; updated_at: string; }
+
+const timeline = ["submitted", "under_review", "resolved"];
+const statusColors: Record<string, string> = {
+  submitted: "bg-info/10 text-info", under_review: "bg-warning/10 text-warning",
+  resolved: "bg-success/10 text-success", rejected: "bg-destructive/10 text-destructive",
 };
 
-const timelineSteps = ["Submitted", "Under Review", "In Progress", "Resolved"];
-
 export default function TrackComplaintPage() {
-  const [refId, setRefId] = useState("");
-  const [phone, setPhone] = useState("");
+  const { user } = useAuth();
+  const [params] = useSearchParams();
+  const initial = params.get("ref") || "";
+  const [ref, setRef] = useState(initial);
   const [result, setResult] = useState<Complaint | null>(null);
+  const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
-  const [error, setError] = useState("");
 
-  const handleTrack = () => {
-    setError("");
-    if (!refId.trim() || !phone.trim()) { setError("Both fields are required."); return; }
-    const c = trackComplaint(refId.trim(), phone.trim());
-    setResult(c);
+  const track = async (r: string) => {
+    if (!r || !user) return;
+    setLoading(true);
+    const { data } = await supabase.from("complaints").select("*").eq("reference", r.trim()).eq("user_id", user.id).maybeSingle();
+    setResult((data as Complaint) || null);
     setSearched(true);
+    setLoading(false);
   };
 
-  const getStepIndex = (status: string) => {
-    const idx = timelineSteps.indexOf(status);
-    return idx >= 0 ? idx : status === "Closed" ? 3 : 0;
-  };
+  useEffect(() => { if (initial) track(initial); /* eslint-disable-next-line */ }, [user]);
+
+  const stepIdx = result ? Math.max(0, timeline.indexOf(result.status)) : 0;
 
   return (
-    <div className="page-container">
-      <div className="max-w-2xl mx-auto">
-        <div className="mb-8">
-          <div className="inline-flex items-center gap-2 text-accent text-sm font-medium mb-2">
-            <Search className="w-4 h-4" />
-            Track Status
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground mb-2">Track Your Complaint</h1>
-          <p className="text-muted-foreground">Enter your reference ID and phone number to check status.</p>
-        </div>
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-2">Track a complaint</h1>
+      <p className="text-muted-foreground mb-6">Look up any complaint you've filed by its reference.</p>
+      <Card className="rounded-3xl">
+        <CardContent className="p-6 flex gap-3">
+          <Input value={ref} onChange={e => setRef(e.target.value)} placeholder="JMRC-XXXXXX" className="rounded-xl h-11" />
+          <Button onClick={() => track(ref)} className="rounded-full gap-1.5"><Search className="w-4 h-4" />Track</Button>
+        </CardContent>
+      </Card>
 
-        <Card className="shadow-lg">
-          <CardContent className="p-6 sm:p-8 space-y-4">
-            <div>
-              <label className="block text-sm font-semibold mb-2">Reference ID</label>
-              <Input value={refId} onChange={e => setRefId(e.target.value)} placeholder="e.g. JMRC-SAMPLE1" className="h-11" />
+      {loading && <div className="py-10 flex justify-center"><Loader2 className="w-5 h-5 animate-spin text-primary" /></div>}
+
+      {!loading && searched && !result && (
+        <Card className="rounded-3xl mt-6"><CardContent className="p-10 text-center">
+          <MessageSquare className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+          <p className="font-medium">No complaint found</p>
+          <p className="text-sm text-muted-foreground">Check the reference or file a new complaint.</p>
+        </CardContent></Card>
+      )}
+
+      {result && (
+        <Card className="rounded-3xl mt-6">
+          <CardContent className="p-6 space-y-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-mono text-xs text-muted-foreground">{result.reference}</p>
+                <h3 className="text-xl font-bold">{result.subject}</h3>
+              </div>
+              <Badge className={statusColors[result.status]}>{result.status.replace("_", " ")}</Badge>
             </div>
-            <div>
-              <label className="block text-sm font-semibold mb-2">Phone Number</label>
-              <Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="10-digit number" maxLength={10} className="h-11" />
+            <div className="flex items-center justify-between">
+              {timeline.map((s, i) => (
+                <div key={s} className="flex items-center flex-1">
+                  <div className="flex flex-col items-center">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${i <= stepIdx ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>{i + 1}</div>
+                    <span className="text-[10px] mt-1.5 capitalize">{s.replace("_", " ")}</span>
+                  </div>
+                  {i < timeline.length - 1 && <div className={`flex-1 h-0.5 mx-1 mt-[-16px] ${i < stepIdx ? "bg-primary" : "bg-border"}`} />}
+                </div>
+              ))}
             </div>
-            {error && <p className="text-destructive text-sm font-medium">{error}</p>}
-            <Button onClick={handleTrack} className="w-full h-11 bg-accent text-accent-foreground hover:bg-accent/90 gap-2">
-              <Search className="w-4 h-4" /> Track Complaint
-            </Button>
+            <div className="text-sm space-y-2">
+              <p><span className="text-muted-foreground">Category: </span>{result.category}</p>
+              {result.station && <p><span className="text-muted-foreground">Station: </span>{result.station}</p>}
+              <p className="text-muted-foreground bg-muted p-3 rounded-xl">{result.description}</p>
+              {result.admin_response && (
+                <div className="bg-primary/5 border border-primary/10 p-3 rounded-xl">
+                  <p className="text-xs text-primary font-semibold mb-1">Response from JMRC</p>
+                  <p>{result.admin_response}</p>
+                </div>
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground">Filed {new Date(result.created_at).toLocaleString("en-IN")} · Updated {new Date(result.updated_at).toLocaleString("en-IN")}</p>
           </CardContent>
         </Card>
-
-        {searched && !result && (
-          <Card className="mt-6 border-destructive/20 animate-fade-in">
-            <CardContent className="p-8 text-center">
-              <AlertTriangle className="w-10 h-10 text-destructive mx-auto mb-3" />
-              <p className="font-bold text-foreground">No complaint found</p>
-              <p className="text-sm text-muted-foreground">Please check your reference ID and phone number.</p>
-            </CardContent>
-          </Card>
-        )}
-
-        {result && (
-          <div className="mt-6 space-y-4 animate-fade-in">
-            {/* Status Header */}
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <p className="font-mono text-sm text-muted-foreground">{result.referenceId}</p>
-                    <h3 className="text-xl font-bold text-foreground mt-1">{result.category} — {result.station}</h3>
-                  </div>
-                  <Badge className={`text-sm px-4 py-1.5 ${statusConfig[result.status]?.color || ""}`}>
-                    {result.status}
-                  </Badge>
-                </div>
-
-                {/* Timeline */}
-                <div className="flex items-center justify-between mt-6">
-                  {timelineSteps.map((stepLabel, i) => {
-                    const currentIdx = getStepIndex(result.status);
-                    const isCompleted = i <= currentIdx;
-                    const isCurrent = i === currentIdx;
-                    return (
-                      <div key={stepLabel} className="flex items-center flex-1">
-                        <div className="flex flex-col items-center">
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-                            isCurrent ? "bg-accent text-accent-foreground ring-4 ring-accent/20" :
-                            isCompleted ? "bg-success text-success-foreground" :
-                            "bg-muted text-muted-foreground"
-                          }`}>
-                            {isCompleted && !isCurrent ? "✓" : i + 1}
-                          </div>
-                          <span className={`text-[10px] mt-1.5 font-medium ${isCompleted ? "text-foreground" : "text-muted-foreground"}`}>
-                            {stepLabel}
-                          </span>
-                        </div>
-                        {i < timelineSteps.length - 1 && (
-                          <div className={`flex-1 h-0.5 mx-1 mt-[-16px] ${i < currentIdx ? "bg-success" : "bg-border"}`} />
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Details */}
-            <Card>
-              <CardContent className="p-6 space-y-4">
-                <h4 className="font-bold text-foreground">Complaint Details</h4>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-muted-foreground" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Filed by</p>
-                      <p className="font-medium text-foreground">{result.name}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-muted-foreground" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Station</p>
-                      <p className="font-medium text-foreground">{result.station}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <Badge variant="outline">{result.category}</Badge>
-                  <Badge variant={result.priority === "Critical" ? "destructive" : "secondary"}>{result.priority}</Badge>
-                </div>
-
-                <p className="text-sm text-muted-foreground bg-muted p-3 rounded-lg">{result.description}</p>
-
-                {result.assignedOfficer && (
-                  <div className="flex items-center gap-2 p-3 bg-secondary/5 rounded-lg border border-secondary/10">
-                    <Shield className="w-4 h-4 text-secondary" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Assigned Officer</p>
-                      <p className="font-medium text-foreground text-sm">{result.assignedOfficer}</p>
-                    </div>
-                  </div>
-                )}
-
-                <div className="text-xs text-muted-foreground space-y-1 pt-3 border-t">
-                  <div className="flex items-center gap-1"><Clock className="w-3 h-3" /> Filed: {new Date(result.createdAt).toLocaleString("en-IN")}</div>
-                  <div className="flex items-center gap-1"><Clock className="w-3 h-3" /> Updated: {new Date(result.updatedAt).toLocaleString("en-IN")}</div>
-                  <div className="flex items-center gap-1"><Clock className="w-3 h-3" /> SLA Deadline: {new Date(result.slaDeadline).toLocaleString("en-IN")}</div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 }

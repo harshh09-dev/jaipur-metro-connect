@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {
   Train,
@@ -17,23 +17,41 @@ import {
   Building2,
   Landmark,
   CreditCard,
+  LogOut,
+  User,
+  LayoutDashboard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useAuth } from "@/context/AuthContext";
+import {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
 import jmrcLogo from "@/assets/jmrc-logo.png";
 
-const navItems = [
+const publicNav = [
   { path: "/", label: "Home", icon: Train },
-  { path: "/journey-planner", label: "Services", icon: Train },
+  { path: "/journey-planner", label: "Journey", icon: Train },
   { path: "/metro-map", label: "Routes", icon: Map },
-  { path: "/complaints", label: "Support", icon: MessageSquare },
-  { path: "/announcements", label: "About", icon: Megaphone },
-  { path: "/alerts", label: "Contact", icon: Phone },
+  { path: "/stations", label: "Stations", icon: MapPin },
+  { path: "/timings", label: "Timetable", icon: Clock },
+  { path: "/announcements", label: "News", icon: Megaphone },
+];
+
+const authedNav = [
+  { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { path: "/journey-planner", label: "Journey", icon: Train },
+  { path: "/smart-card", label: "Smart Card", icon: CreditCard },
+  { path: "/complaints", label: "Complaints", icon: MessageSquare },
 ];
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const nav = useNavigate();
+  const { user, profile, signOut } = useAuth();
+  const navItems = user ? authedNav : publicNav;
+  const initials = (profile?.full_name || "U").split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase();
 
   return (
     <header className="sticky top-3 z-50 px-3 sm:px-4">
@@ -69,16 +87,33 @@ export function Header() {
 
           <div className="hidden lg:flex items-center gap-2">
             <ThemeToggle />
-            <Link to="/track-complaint">
-              <Button variant="ghost" size="sm" className="rounded-full text-foreground/70 hover:text-foreground hover:bg-muted gap-1.5">
-                <Search className="w-4 h-4" /> Login
-              </Button>
-            </Link>
-            <Link to="/admin">
-              <Button size="sm" className="rounded-full bg-primary text-primary-foreground hover:bg-[hsl(210,65%,30%)] px-4 shadow-sm">
-                Create Account
-              </Button>
-            </Link>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="w-9 h-9 rounded-full bg-primary text-primary-foreground text-xs font-semibold flex items-center justify-center shadow-sm">
+                    {initials}
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 rounded-2xl">
+                  <DropdownMenuLabel>
+                    <div className="text-sm font-semibold truncate">{profile?.full_name || "Passenger"}</div>
+                    <div className="text-[11px] text-muted-foreground font-mono">{profile?.passenger_id}</div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => nav("/dashboard")}><LayoutDashboard className="w-4 h-4 mr-2" />Dashboard</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => nav("/smart-card")}><CreditCard className="w-4 h-4 mr-2" />Smart Card</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => nav("/complaints")}><MessageSquare className="w-4 h-4 mr-2" />Complaints</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => nav("/profile")}><User className="w-4 h-4 mr-2" />Profile</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={async () => { await signOut(); nav("/"); }}><LogOut className="w-4 h-4 mr-2" />Sign out</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Link to="/auth"><Button variant="ghost" size="sm" className="rounded-full">Sign in</Button></Link>
+                <Link to="/auth"><Button size="sm" className="rounded-full bg-primary text-primary-foreground hover:bg-[hsl(210,65%,30%)] px-4 shadow-sm">Create Account</Button></Link>
+              </>
+            )}
           </div>
 
           <button
@@ -114,12 +149,17 @@ export function Header() {
               );
             })}
             <div className="pt-2 border-t border-border space-y-1">
-              <Link to="/track-complaint" onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-foreground/80 hover:bg-muted">
-                <Search className="w-4 h-4" /> Login
-              </Link>
-              <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center justify-center gap-3 px-3 py-2.5 rounded-full text-sm font-medium bg-primary text-primary-foreground mt-2">
-                Create Account
-              </Link>
+              {user ? (
+                <>
+                  <Link to="/profile" onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-foreground/80 hover:bg-muted"><User className="w-4 h-4" />Profile</Link>
+                  <button onClick={async () => { await signOut(); setMobileOpen(false); nav("/"); }} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-foreground/80 hover:bg-muted"><LogOut className="w-4 h-4" />Sign out</button>
+                </>
+              ) : (
+                <>
+                  <Link to="/auth" onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-foreground/80 hover:bg-muted"><User className="w-4 h-4" />Sign in</Link>
+                  <Link to="/auth" onClick={() => setMobileOpen(false)} className="flex items-center justify-center gap-3 px-3 py-2.5 rounded-full text-sm font-medium bg-primary text-primary-foreground mt-2">Create Account</Link>
+                </>
+              )}
             </div>
           </nav>
         </div>

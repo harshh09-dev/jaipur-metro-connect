@@ -1,34 +1,56 @@
-import { useState } from "react";
-import { CreditCard, ArrowRight, IndianRupee, History, CheckCircle2, Wallet, RefreshCw } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowRight, IndianRupee, History, CheckCircle2, Wallet, RefreshCw, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { getSmartCard, getTransactions, rechargeCard, rechargeAmounts, paymentMethods, type SmartCard, type Transaction } from "@/data/smart-card-data";
+import { rechargeAmounts, paymentMethods } from "@/data/smart-card-data";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+
+interface CardRow { card_number: string; balance: number; status: string; issue_date: string; expiry_date: string; }
+interface Tx { id: string; type: string; amount: number; balance_after: number; description: string | null; created_at: string; }
 
 type Tab = "balance" | "recharge" | "history";
 
 export default function SmartCardPage() {
   const { toast } = useToast();
+  const { profile, user } = useAuth();
   const [activeTab, setActiveTab] = useState<Tab>("balance");
-  const [card, setCard] = useState<SmartCard>(getSmartCard);
-  const [transactions, setTransactions] = useState<Transaction[]>(getTransactions);
+  const [card, setCard] = useState<CardRow | null>(null);
+  const [transactions, setTransactions] = useState<Tx[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState("");
   const [selectedMethod, setSelectedMethod] = useState("UPI");
-  const [rechargeSuccess, setRechargeSuccess] = useState<{ amount: number; txId: string; balance: number } | null>(null);
+  const [rechargeSuccess, setRechargeSuccess] = useState<{ amount: number; balance: number } | null>(null);
 
-  const handleRecharge = () => {
+  const load = async () => {
+    if (!user) return;
+    setLoading(true);
+    const [{ data: c }, { data: txs }] = await Promise.all([
+      supabase.from("smart_cards").select("card_number,balance,status,issue_date,expiry_date").eq("user_id", user.id).maybeSingle(),
+      supabase.from("transactions").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(50),
+    ]);
+    if (c) setCard(c as CardRow);
+    setTransactions((txs as Tx[]) || []);
+    setLoading(false);
+  };
+
+  useEffect(() => { load(); }, [user]);
+
+  const handleRecharge = async () => {
     const amount = selectedAmount || Number(customAmount);
     if (!amount || amount < 10 || amount > 5000) {
       toast({ title: "Invalid amount", description: "Enter an amount between ₹10 and ₹5000", variant: "destructive" });
       return;
     }
-    const result = rechargeCard(amount, selectedMethod);
-    setCard(result.card);
-    setTransactions(getTransactions());
-    setRechargeSuccess({ amount, txId: result.transaction.id, balance: result.card.balance });
+    const { data, error } = await supabase.rpc("recharge_card", { _amount: amount, _method: selectedMethod });
+    if (error) return toast({ title: "Recharge failed", description: error.message, variant: "destructive" });
+    const newBal = (data as any)?.balance ?? 0;
+    await load();
+    setRechargeSuccess({ amount, balance: newBal });
     setSelectedAmount(null);
     setCustomAmount("");
   };
@@ -39,12 +61,18 @@ export default function SmartCardPage() {
     { id: "history", label: "History", icon: History },
   ];
 
+  if (loading || !card) {
+    return <div className="min-h-[50vh] flex items-center justify-center"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>;
+  }
+
+  const holder = (profile?.full_name || "").toUpperCase();
+
   return (
     <div className="min-h-screen bg-background">
       <section className="bg-secondary/60 border-b border-border py-10 sm:py-14">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-foreground mb-2">Smart Card Services</h1>
-          <p className="text-muted-foreground text-base">Check balance, recharge and view transactions.</p>
+          <p className="text-muted-foreground text-base">{profile?.passenger_id} · {holder}</p>
         </div>
       </section>
 
@@ -61,12 +89,12 @@ export default function SmartCardPage() {
                 <Badge className="bg-success/20 text-success border-success/30 text-[10px] backdrop-blur-sm">{card.status}</Badge>
               </div>
               <div className="relative w-10 h-7 bg-gradient-to-br from-warning to-warning/70 rounded-md mb-5 shadow-inner" />
-              <p className="relative text-lg sm:text-xl font-mono font-bold tracking-[0.18em] mb-1">{card.cardNumber}</p>
-              <p className="relative text-[10px] text-white/50 uppercase tracking-wider mb-5">Valid Thru 12/29</p>
+              <p className="relative text-lg sm:text-xl font-mono font-bold tracking-[0.18em] mb-1">{card.card_number}</p>
+              <p className="relative text-[10px] text-white/50 uppercase tracking-wider mb-5">Valid Thru {new Date(card.expiry_date).toLocaleDateString("en-IN", { month: "2-digit", year: "2-digit" })}</p>
               <div className="relative flex items-end justify-between">
                 <div>
                   <p className="text-[10px] text-white/50 uppercase tracking-wider">Card Holder</p>
-                  <p className="text-sm font-semibold tracking-wide">{card.holderName}</p>
+                  <p className="text-sm font-semibold tracking-wide">{holder}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-[10px] text-white/50 uppercase tracking-wider">Balance</p>
@@ -112,11 +140,11 @@ export default function SmartCardPage() {
                 </div>
                 <div className="bg-muted/50 rounded-lg p-4">
                   <p className="text-xs text-muted-foreground mb-1">Card Number</p>
-                  <p className="font-mono font-semibold text-foreground">{card.cardNumber}</p>
+                  <p className="font-mono font-semibold text-foreground">{card.card_number}</p>
                 </div>
                 <div className="bg-muted/50 rounded-lg p-4">
-                  <p className="text-xs text-muted-foreground mb-1">Last Recharge</p>
-                  <p className="font-semibold text-foreground">{new Date(card.lastRecharge).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</p>
+                  <p className="text-xs text-muted-foreground mb-1">Issued</p>
+                  <p className="font-semibold text-foreground">{new Date(card.issue_date).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</p>
                 </div>
               </div>
               <div className="mt-6 bg-secondary/5 border border-secondary/10 rounded-lg p-4">
@@ -206,7 +234,6 @@ export default function SmartCardPage() {
               <div className="bg-muted/50 rounded-xl p-4 max-w-xs mx-auto space-y-2 text-sm mb-6">
                 <div className="flex justify-between"><span className="text-muted-foreground">Amount Added</span><span className="font-bold text-foreground">₹{rechargeSuccess.amount}</span></div>
                 <div className="flex justify-between"><span className="text-muted-foreground">New Balance</span><span className="font-bold text-success">₹{rechargeSuccess.balance}</span></div>
-                <div className="flex justify-between"><span className="text-muted-foreground">Transaction ID</span><span className="font-mono text-xs text-foreground">{rechargeSuccess.txId}</span></div>
               </div>
               <Button onClick={() => setRechargeSuccess(null)} variant="outline" className="gap-2">
                 <RefreshCw className="w-4 h-4" /> Recharge Again
@@ -223,6 +250,7 @@ export default function SmartCardPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
+                {transactions.length === 0 && <p className="text-sm text-muted-foreground text-center py-8">No transactions yet. Recharge your card to see history here.</p>}
                 {transactions.map(tx => (
                   <div key={tx.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
                     <div className="flex items-center gap-3">
@@ -234,7 +262,7 @@ export default function SmartCardPage() {
                       <div>
                         <p className="text-sm font-medium text-foreground">{tx.description}</p>
                         <p className="text-xs text-muted-foreground">
-                          {new Date(tx.date).toLocaleDateString("en-IN", { day: "numeric", month: "short" })} · {new Date(tx.date).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
+                          {new Date(tx.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" })} · {new Date(tx.created_at).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
                         </p>
                       </div>
                     </div>
@@ -242,7 +270,7 @@ export default function SmartCardPage() {
                       <p className={`font-bold text-sm ${tx.amount > 0 ? "text-success" : "text-foreground"}`}>
                         {tx.amount > 0 ? "+" : ""}₹{Math.abs(tx.amount)}
                       </p>
-                      <p className="text-xs text-muted-foreground">Bal: ₹{tx.balanceAfter}</p>
+                      <p className="text-xs text-muted-foreground">Bal: ₹{tx.balance_after}</p>
                     </div>
                   </div>
                 ))}

@@ -14,16 +14,269 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      complaints: {
+        Row: {
+          admin_response: string | null
+          category: string
+          created_at: string
+          description: string
+          id: string
+          image_url: string | null
+          reference: string
+          station: string | null
+          status: string
+          subject: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_response?: string | null
+          category: string
+          created_at?: string
+          description: string
+          id?: string
+          image_url?: string | null
+          reference: string
+          station?: string | null
+          status?: string
+          subject: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_response?: string | null
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: string | null
+          reference?: string
+          station?: string | null
+          status?: string
+          subject?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          address: string | null
+          avatar_url: string | null
+          city: string | null
+          created_at: string
+          dob: string | null
+          email: string | null
+          emergency_contact: string | null
+          full_name: string
+          gender: string | null
+          gov_id: string | null
+          id: string
+          passenger_id: string
+          phone: string | null
+          pincode: string | null
+          state: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          avatar_url?: string | null
+          city?: string | null
+          created_at?: string
+          dob?: string | null
+          email?: string | null
+          emergency_contact?: string | null
+          full_name: string
+          gender?: string | null
+          gov_id?: string | null
+          id: string
+          passenger_id: string
+          phone?: string | null
+          pincode?: string | null
+          state?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          avatar_url?: string | null
+          city?: string | null
+          created_at?: string
+          dob?: string | null
+          email?: string | null
+          emergency_contact?: string | null
+          full_name?: string
+          gender?: string | null
+          gov_id?: string | null
+          id?: string
+          passenger_id?: string
+          phone?: string | null
+          pincode?: string | null
+          state?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      smart_cards: {
+        Row: {
+          balance: number
+          card_number: string
+          created_at: string
+          expiry_date: string
+          id: string
+          issue_date: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          card_number: string
+          created_at?: string
+          expiry_date?: string
+          id?: string
+          issue_date?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          card_number?: string
+          created_at?: string
+          expiry_date?: string
+          id?: string
+          issue_date?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tickets: {
+        Row: {
+          created_at: string
+          fare: number
+          from_station: string
+          id: string
+          journey_date: string
+          qr_payload: string
+          reference: string
+          status: string
+          to_station: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          fare: number
+          from_station: string
+          id?: string
+          journey_date?: string
+          qr_payload: string
+          reference: string
+          status?: string
+          to_station: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          fare?: number
+          from_station?: string
+          id?: string
+          journey_date?: string
+          qr_payload?: string
+          reference?: string
+          status?: string
+          to_station?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number
+          balance_after: number
+          created_at: string
+          description: string | null
+          id: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          balance_after: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          balance_after?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      recharge_card: {
+        Args: { _amount: number; _method: string }
+        Returns: {
+          balance: number
+          card_number: string
+          created_at: string
+          expiry_date: string
+          id: string
+          issue_date: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "smart_cards"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "passenger"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +403,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "passenger"],
+    },
   },
 } as const

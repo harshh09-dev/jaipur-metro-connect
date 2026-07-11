@@ -1,68 +1,62 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CreditCard, MessageSquare, Ticket, Bell, ArrowUpRight, Wallet, Route, User } from "lucide-react";
+import { MessageSquare, Ticket, ArrowUpRight, Wallet, Route, User } from "lucide-react";
+import { PageHeader } from "@/components/ui-kit/PageHeader";
+import { StatCard } from "@/components/ui-kit/StatCard";
+import { FadeIn } from "@/components/ui-kit/Motion";
+import { useSmartCard } from "@/lib/api/hooks/useSmartCard";
+import { useComplaints } from "@/lib/api/hooks/useComplaints";
 
 export default function DashboardPage() {
-  const { profile, user } = useAuth();
-  const [card, setCard] = useState<{ card_number: string; balance: number; status: string } | null>(null);
-  const [complaints, setComplaints] = useState<number>(0);
-  const [tickets, setTickets] = useState<number>(0);
-
-  useEffect(() => {
-    if (!user) return;
-    (async () => {
-      const [{ data: c }, { count: cc }, { count: tc }] = await Promise.all([
-        supabase.from("smart_cards").select("card_number,balance,status").eq("user_id", user.id).maybeSingle(),
-        supabase.from("complaints").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-        supabase.from("tickets").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      ]);
-      if (c) setCard(c as any);
-      setComplaints(cc || 0);
-      setTickets(tc || 0);
-    })();
-  }, [user]);
+  const { profile } = useAuth();
+  const { data: card } = useSmartCard();
+  const { data: complaintsList } = useComplaints();
 
   const first = profile?.full_name?.split(" ")[0] || "there";
+  const hour = new Date().getHours();
+  const greet = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="mb-8">
-        <p className="text-sm text-muted-foreground">Passenger ID · {profile?.passenger_id}</p>
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Welcome back, {first}.</h1>
-      </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-8 lg:py-10">
+      <FadeIn>
+        <PageHeader
+          eyebrow={`Passenger · ${profile?.passenger_id ?? ""}`}
+          title={`${greet}, ${first}.`}
+          description="Here's a snapshot of your smart card, journeys and support tickets."
+        />
+      </FadeIn>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
-        <Card className="lg:col-span-2 rounded-3xl overflow-hidden border-none bg-gradient-to-br from-primary to-[hsl(210,70%,32%)] text-primary-foreground">
+      <FadeIn delay={0.05}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
+        <Card className="lg:col-span-2 rounded-3xl overflow-hidden border-none bg-gradient-to-br from-secondary via-[hsl(220,39%,15%)] to-[hsl(357,60%,25%)] text-white">
           <CardContent className="p-8">
             <div className="flex items-center justify-between mb-6">
-              <span className="text-xs uppercase tracking-[0.2em] text-primary-foreground/70">Smart Card</span>
-              <Badge className="bg-primary-foreground/15 text-primary-foreground border-0">{card?.status ?? "Active"}</Badge>
+              <span className="text-xs uppercase tracking-[0.2em] text-white/60">JMRC Smart Card</span>
+              <Badge className="bg-white/10 text-white border-0 backdrop-blur-sm">{card?.status ?? "Active"}</Badge>
             </div>
             <p className="font-mono tracking-[0.2em] text-lg mb-6">{card?.card_number ?? "•••• •••• •••• ••••"}</p>
             <div className="flex items-end justify-between">
               <div>
-                <p className="text-xs text-primary-foreground/60 uppercase tracking-wider">Balance</p>
+                <p className="text-xs text-white/60 uppercase tracking-wider">Balance</p>
                 <p className="text-4xl font-bold">₹{card?.balance ?? 0}</p>
               </div>
-              <Link to="/smart-card"><Button variant="secondary" className="rounded-full gap-1.5">Recharge <ArrowUpRight className="w-4 h-4" /></Button></Link>
+              <Link to="/smart-card"><Button className="rounded-full gap-1.5 bg-primary text-primary-foreground hover:bg-[hsl(var(--primary-hover))]">Recharge <ArrowUpRight className="w-4 h-4" /></Button></Link>
             </div>
           </CardContent>
         </Card>
-        <Card className="rounded-3xl">
+        <Card className="rounded-3xl border-border/60">
           <CardContent className="p-6 space-y-4">
-            <h3 className="font-semibold">Quick actions</h3>
+            <h3 className="font-semibold text-foreground">Quick actions</h3>
             {[
-              { to: "/tickets/buy", icon: Ticket, label: "Buy QR ticket" },
+              { to: "/journey-planner", icon: Ticket, label: "Buy QR ticket" },
               { to: "/complaints", icon: MessageSquare, label: "File complaint" },
               { to: "/journey-planner", icon: Route, label: "Plan journey" },
               { to: "/profile", icon: User, label: "Edit profile" },
             ].map(a => (
-              <Link key={a.to} to={a.to} className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-muted transition">
+              <Link key={a.to + a.label} to={a.to} className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-muted transition">
                 <span className="flex items-center gap-2.5 text-sm font-medium"><a.icon className="w-4 h-4 text-primary" />{a.label}</span>
                 <ArrowUpRight className="w-4 h-4 text-muted-foreground" />
               </Link>
@@ -70,22 +64,15 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+      </FadeIn>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        {[
-          { icon: Wallet, label: "Wallet balance", value: `₹${card?.balance ?? 0}` },
-          { icon: Ticket, label: "Total tickets", value: tickets },
-          { icon: MessageSquare, label: "Complaints filed", value: complaints },
-        ].map(k => (
-          <Card key={k.label} className="rounded-3xl">
-            <CardContent className="p-6">
-              <k.icon className="w-5 h-5 text-primary mb-3" />
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">{k.label}</p>
-              <p className="text-2xl font-bold mt-1">{k.value}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <FadeIn delay={0.1}>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <StatCard icon={Wallet} label="Wallet balance" value={`₹${card?.balance ?? 0}`} />
+          <StatCard icon={Ticket} label="Total tickets" value={0} />
+          <StatCard icon={MessageSquare} label="Complaints filed" value={complaintsList?.length ?? 0} />
+        </div>
+      </FadeIn>
     </div>
   );
 }

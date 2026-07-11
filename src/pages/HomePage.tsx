@@ -113,7 +113,7 @@ export default function HomePage() {
                 <Link key={link.label} to={link.path} className="group">
                   <Card className="h-full bg-card hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 border border-border rounded-2xl">
                     <CardContent className="p-4 sm:p-5 flex flex-col items-center text-center gap-3">
-                      <div className="w-11 h-11 rounded-xl bg-secondary flex items-center justify-center">
+                      <div className="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                         <Icon className="w-5 h-5 text-primary" />
                       </div>
                       <h3 className="font-semibold text-sm text-foreground leading-tight">{link.label}</h3>
@@ -127,7 +127,7 @@ export default function HomePage() {
       </section>
 
       {/* Quick Route Finder */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-secondary/60 border-y border-border">
+      <section className="py-12 sm:py-16 lg:py-20 bg-muted border-y border-border">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground mb-2">Plan Your Journey</h2>
@@ -145,7 +145,7 @@ export default function HomePage() {
                     </SelectContent>
                   </Select>
                 </div>
-                <button onClick={() => { setSource(destination); setDestination(source); }} className="hidden sm:flex h-11 w-11 mx-auto items-center justify-center rounded-full bg-secondary hover:bg-secondary/70 border border-border transition-colors">
+                <button onClick={() => { setSource(destination); setDestination(source); }} className="hidden sm:flex h-11 w-11 mx-auto items-center justify-center rounded-full bg-card hover:bg-muted border border-border transition-colors">
                   <ArrowRightLeft className="w-4 h-4 text-primary" />
                 </button>
                 <div>
@@ -160,15 +160,15 @@ export default function HomePage() {
               </div>
               {result && (
                 <div className="grid grid-cols-3 gap-3 pt-5 mt-5 border-t border-border">
-                  <div className="text-center p-3 rounded-xl bg-secondary/60">
+                  <div className="text-center p-3 rounded-xl bg-muted">
                     <div className="text-xl sm:text-2xl font-bold text-primary">₹{result.fare}</div>
                     <div className="text-[10px] text-muted-foreground uppercase tracking-wider mt-0.5">Fare</div>
                   </div>
-                  <div className="text-center p-3 rounded-xl bg-secondary/60">
+                  <div className="text-center p-3 rounded-xl bg-muted">
                     <div className="text-xl sm:text-2xl font-bold text-foreground">{result.stations}</div>
                     <div className="text-[10px] text-muted-foreground uppercase tracking-wider mt-0.5">Stations</div>
                   </div>
-                  <div className="text-center p-3 rounded-xl bg-secondary/60">
+                  <div className="text-center p-3 rounded-xl bg-muted">
                     <div className="text-xl sm:text-2xl font-bold text-foreground">{result.time}m</div>
                     <div className="text-[10px] text-muted-foreground uppercase tracking-wider mt-0.5">Time</div>
                   </div>
@@ -197,7 +197,7 @@ export default function HomePage() {
               return (
                 <Card key={item.title} className="bg-card border border-border rounded-2xl hover:shadow-md transition-all">
                   <CardContent className="p-6">
-                    <div className="w-11 h-11 rounded-xl bg-secondary flex items-center justify-center mb-4">
+                    <div className="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4">
                       <Icon className="w-5 h-5 text-primary" />
                     </div>
                     <h3 className="font-bold text-base text-foreground mb-1.5">{item.title}</h3>
@@ -211,7 +211,7 @@ export default function HomePage() {
       </section>
 
       {/* About JMRC */}
-      <section className="py-12 sm:py-16 lg:py-24 bg-secondary/60 border-y border-border">
+      <section className="py-12 sm:py-16 lg:py-24 bg-muted border-y border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
             <div>
@@ -327,7 +327,7 @@ export default function HomePage() {
       </section>
 
       {/* Stats */}
-      <section className="py-12 sm:py-16 lg:py-24 bg-secondary/60 border-y border-border">
+      <section className="py-12 sm:py-16 lg:py-24 bg-muted border-y border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-2xl overflow-hidden">
             <img src={heroImage} alt="" className="absolute inset-0 w-full h-full object-cover" />
@@ -392,7 +392,7 @@ export default function HomePage() {
       </section>
 
       {/* Smart Card CTA */}
-      <section className="py-12 sm:py-16 lg:py-24 bg-secondary/60 border-y border-border">
+      <section className="py-12 sm:py-16 lg:py-24 bg-muted border-y border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
@@ -472,7 +472,7 @@ export default function HomePage() {
       </section>
 
       {/* Download App CTA */}
-      <section className="py-12 sm:py-16 lg:py-24 bg-secondary/60 border-y border-border">
+      <section className="py-12 sm:py-16 lg:py-24 bg-muted border-y border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
             <div>

@@ -114,7 +114,7 @@ export default function SmartCardPage() {
         {activeTab === "balance" && (
           <Card className="animate-fade-in">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2"><Wallet className="w-5 h-5 text-secondary" /> Card Details</CardTitle>
+              <CardTitle className="flex items-center gap-2"><Wallet className="w-5 h-5 text-accent" /> Card Details</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
@@ -135,7 +135,7 @@ export default function SmartCardPage() {
                   <p className="font-semibold text-foreground">{new Date(card.issue_date).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</p>
                 </div>
               </div>
-              <div className="mt-6 bg-secondary/5 border border-secondary/10 rounded-lg p-4">
+              <div className="mt-6 bg-accent/5 border border-accent/10 rounded-lg p-4">
                 <h4 className="font-semibold text-sm mb-2">💡 Smart Card Benefits</h4>
                 <ul className="text-sm text-muted-foreground space-y-1">
                   <li>• 15% discount on all metro journeys</li>
@@ -152,7 +152,7 @@ export default function SmartCardPage() {
         {activeTab === "recharge" && !rechargeSuccess && (
           <Card className="animate-fade-in">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2"><RefreshCw className="w-5 h-5 text-secondary" /> Recharge Card</CardTitle>
+              <CardTitle className="flex items-center gap-2"><RefreshCw className="w-5 h-5 text-accent" /> Recharge Card</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
@@ -164,8 +164,8 @@ export default function SmartCardPage() {
                       onClick={() => { setSelectedAmount(amt); setCustomAmount(""); }}
                       className={`p-4 rounded-xl border-2 text-center transition-all ${
                         selectedAmount === amt
-                          ? "border-secondary bg-secondary/10 text-secondary"
-                          : "border-border hover:border-secondary/50"
+                          ? "border-accent bg-accent/10 text-accent"
+                          : "border-border hover:border-accent/50"
                       }`}
                     >
                       <span className="text-xl font-bold">₹{amt}</span>
@@ -193,8 +193,8 @@ export default function SmartCardPage() {
                       onClick={() => setSelectedMethod(m)}
                       className={`p-3 rounded-xl border-2 text-sm font-medium transition-all ${
                         selectedMethod === m
-                          ? "border-secondary bg-secondary/10 text-secondary"
-                          : "border-border hover:border-secondary/50"
+                          ? "border-accent bg-accent/10 text-accent"
+                          : "border-border hover:border-accent/50"
                       }`}
                     >
                       {m}
@@ -234,7 +234,7 @@ export default function SmartCardPage() {
         {activeTab === "history" && (
           <Card className="animate-fade-in">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2"><History className="w-5 h-5 text-secondary" /> Transaction History</CardTitle>
+              <CardTitle className="flex items-center gap-2"><History className="w-5 h-5 text-accent" /> Transaction History</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
@@ -243,7 +243,7 @@ export default function SmartCardPage() {
                   <div key={tx.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
                     <div className="flex items-center gap-3">
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        tx.type === "recharge" ? "bg-success/10 text-success" : tx.type === "refund" ? "bg-secondary/10 text-secondary" : "bg-accent/10 text-accent"
+                        tx.type === "recharge" ? "bg-success/10 text-success" : tx.type === "refund" ? "bg-accent/10 text-accent" : "bg-accent/10 text-accent"
                       }`}>
                         {tx.type === "recharge" ? <ArrowRight className="w-4 h-4 rotate-180" /> : <ArrowRight className="w-4 h-4" />}
                       </div>

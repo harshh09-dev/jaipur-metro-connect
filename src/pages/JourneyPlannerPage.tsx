@@ -130,7 +130,7 @@ export default function JourneyPlannerPage() {
               </div>
 
               <div className="flex justify-center">
-                <button onClick={handleSwap} className="p-1.5 rounded-full border-2 border-border hover:border-secondary hover:bg-secondary/5 transition-all active:rotate-180 duration-300">
+                <button onClick={handleSwap} className="p-1.5 rounded-full border-2 border-border hover:border-accent hover:bg-accent/5 transition-all active:rotate-180 duration-300">
                   <ArrowRightLeft className="w-3.5 h-3.5 text-muted-foreground" />
                 </button>
               </div>
@@ -171,7 +171,7 @@ export default function JourneyPlannerPage() {
                   <div className="text-[9px] text-muted-foreground uppercase tracking-wider">Fare</div>
                 </div>
                 <div className="p-4 text-center border-r border-border">
-                  <MapPin className="w-4 h-4 mx-auto text-secondary mb-1" />
+                  <MapPin className="w-4 h-4 mx-auto text-accent mb-1" />
                   <div className="text-xl font-extrabold text-foreground">{result.stations}</div>
                   <div className="text-[9px] text-muted-foreground uppercase tracking-wider">Stops</div>
                 </div>
@@ -233,9 +233,9 @@ export default function JourneyPlannerPage() {
               <div className="p-5 border-b border-border">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">Payment</h3>
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between p-3 rounded-xl bg-secondary/5 border border-secondary/10">
+                  <div className="flex items-center justify-between p-3 rounded-xl bg-accent/5 border border-accent/10">
                     <div className="flex items-center gap-2">
-                      <CreditCard className="w-4 h-4 text-secondary" />
+                      <CreditCard className="w-4 h-4 text-accent" />
                       <span className="text-sm font-medium text-foreground">Smart Card</span>
                     </div>
                     <div className="text-right">
@@ -278,7 +278,7 @@ export default function JourneyPlannerPage() {
                   <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">Last Mile</h3>
                   <div className="p-3 rounded-xl bg-muted/50 border border-border">
                     <div className="flex items-center gap-2 mb-2">
-                      <Landmark className="w-4 h-4 text-secondary" />
+                      <Landmark className="w-4 h-4 text-accent" />
                       <span className="text-sm font-bold text-foreground">{nearbySpot.name}</span>
                     </div>
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">

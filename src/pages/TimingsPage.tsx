@@ -50,15 +50,15 @@ export default function TimingsPage() {
 
               <div>
                 <div className="flex items-center gap-2 mb-3">
-                  <CalendarDays className="w-4 h-4 text-secondary" />
+                  <CalendarDays className="w-4 h-4 text-accent" />
                   <h3 className="font-bold text-sm text-foreground uppercase tracking-wider">Holiday Schedule</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="p-4 bg-secondary/5 rounded-xl border border-secondary/10">
+                  <div className="p-4 bg-accent/5 rounded-xl border border-accent/10">
                     <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">First Train</div>
                     <div className="text-2xl font-extrabold text-foreground">{timing.holidayFirstTrain}</div>
                   </div>
-                  <div className="p-4 bg-secondary/5 rounded-xl border border-secondary/10">
+                  <div className="p-4 bg-accent/5 rounded-xl border border-accent/10">
                     <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Last Train</div>
                     <div className="text-2xl font-extrabold text-foreground">{timing.holidayLastTrain}</div>
                   </div>
@@ -108,7 +108,7 @@ export default function TimingsPage() {
       </Card>
 
       {/* Smart Card Info */}
-      <Card className="mb-8 border-secondary/20">
+      <Card className="mb-8 border-accent/20">
         <CardContent className="p-6">
           <h3 className="font-bold text-foreground mb-3">Smart Card Information</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-muted-foreground">

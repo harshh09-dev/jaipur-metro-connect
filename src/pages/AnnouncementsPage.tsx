@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Megaphone, Newspaper } from "lucide-react";
 
 const categoryConfig: Record<string, { color: string; label: string }> = {
-  news: { color: "bg-secondary/10 text-secondary", label: "News" },
+  news: { color: "bg-accent/10 text-accent", label: "News" },
   update: { color: "bg-info/10 text-info", label: "Update" },
   event: { color: "bg-accent/10 text-accent", label: "Event" },
 };

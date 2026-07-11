@@ -462,7 +462,7 @@ export default function HomePage() {
                     <Badge variant="secondary" className="capitalize text-xs">{a.category}</Badge>
                     <span className="text-xs text-muted-foreground">{new Date(a.date).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}</span>
                   </div>
-                  <h3 className="font-semibold text-foreground mb-2 line-clamp-2 group-hover:text-secondary transition-colors">{a.title}</h3>
+                  <h3 className="font-semibold text-foreground mb-2 line-clamp-2 group-hover:text-accent transition-colors">{a.title}</h3>
                   <p className="text-sm text-muted-foreground line-clamp-2">{a.content}</p>
                 </CardContent>
               </Card>

@@ -57,7 +57,7 @@ export default function TouristSpotsPage() {
 
         {/* Detail Modal */}
         {selectedSpot && (
-          <Card className="mb-8 border-2 border-secondary/20 animate-fade-in">
+          <Card className="mb-8 border-2 border-accent/20 animate-fade-in">
             <CardContent className="p-0">
               <div className="grid grid-cols-1 md:grid-cols-2">
                 <div className="h-64 md:h-auto bg-muted">
@@ -65,7 +65,7 @@ export default function TouristSpotsPage() {
                 </div>
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">
-                    <Badge className="bg-secondary text-secondary-foreground">{selectedSpot.category}</Badge>
+                    <Badge className="bg-secondary text-accent-foreground">{selectedSpot.category}</Badge>
                     <Button variant="ghost" size="sm" onClick={() => setSelectedSpot(null)} className="text-xs">Close</Button>
                   </div>
                   <h2 className="text-2xl font-bold text-foreground mb-2">{selectedSpot.name}</h2>
@@ -88,7 +88,7 @@ export default function TouristSpotsPage() {
 
                   <div className="bg-muted/50 rounded-lg p-4 mb-4">
                     <h4 className="font-semibold text-sm mb-2 flex items-center gap-2">
-                      <Train className="w-4 h-4 text-secondary" /> Reach via Metro
+                      <Train className="w-4 h-4 text-accent" /> Reach via Metro
                     </h4>
                     <p className="text-sm text-muted-foreground">
                       Nearest Station: <span className="font-semibold text-foreground">{selectedSpot.nearestStation}</span>
@@ -127,11 +127,11 @@ export default function TouristSpotsPage() {
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <Train className="w-3.5 h-3.5 text-secondary" />
+                      <Train className="w-3.5 h-3.5 text-accent" />
                       <span>{spot.nearestStation}</span>
                       <span className="text-foreground font-semibold">· {spot.distance}</span>
                     </div>
-                    <Button variant="ghost" size="sm" className="text-secondary text-xs gap-1 h-7 px-2">
+                    <Button variant="ghost" size="sm" className="text-accent text-xs gap-1 h-7 px-2">
                       Details <ArrowRight className="w-3 h-3" />
                     </Button>
                   </div>

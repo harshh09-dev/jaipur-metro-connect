@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ArrowRight, IndianRupee, History, CheckCircle2, Wallet, RefreshCw, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,38 +7,23 @@ import { Input } from "@/components/ui/input";
 import { rechargeAmounts, paymentMethods } from "@/data/smart-card-data";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
-
-interface CardRow { card_number: string; balance: number; status: string; issue_date: string; expiry_date: string; }
-interface Tx { id: string; type: string; amount: number; balance_after: number; description: string | null; created_at: string; }
+import { useSmartCard, useTransactions, useRecharge } from "@/lib/api/hooks/useSmartCard";
+import { PageHeader } from "@/components/ui-kit/PageHeader";
+import { FadeIn } from "@/components/ui-kit/Motion";
 
 type Tab = "balance" | "recharge" | "history";
 
 export default function SmartCardPage() {
   const { toast } = useToast();
-  const { profile, user } = useAuth();
+  const { profile } = useAuth();
+  const { data: card, isLoading } = useSmartCard();
+  const { data: transactions = [] } = useTransactions();
+  const recharge = useRecharge();
   const [activeTab, setActiveTab] = useState<Tab>("balance");
-  const [card, setCard] = useState<CardRow | null>(null);
-  const [transactions, setTransactions] = useState<Tx[]>([]);
-  const [loading, setLoading] = useState(true);
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState("");
   const [selectedMethod, setSelectedMethod] = useState("UPI");
   const [rechargeSuccess, setRechargeSuccess] = useState<{ amount: number; balance: number } | null>(null);
-
-  const load = async () => {
-    if (!user) return;
-    setLoading(true);
-    const [{ data: c }, { data: txs }] = await Promise.all([
-      supabase.from("smart_cards").select("card_number,balance,status,issue_date,expiry_date").eq("user_id", user.id).maybeSingle(),
-      supabase.from("transactions").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(50),
-    ]);
-    if (c) setCard(c as CardRow);
-    setTransactions((txs as Tx[]) || []);
-    setLoading(false);
-  };
-
-  useEffect(() => { load(); }, [user]);
 
   const handleRecharge = async () => {
     const amount = selectedAmount || Number(customAmount);
@@ -46,13 +31,14 @@ export default function SmartCardPage() {
       toast({ title: "Invalid amount", description: "Enter an amount between ₹10 and ₹5000", variant: "destructive" });
       return;
     }
-    const { data, error } = await supabase.rpc("recharge_card", { _amount: amount, _method: selectedMethod });
-    if (error) return toast({ title: "Recharge failed", description: error.message, variant: "destructive" });
-    const newBal = (data as any)?.balance ?? 0;
-    await load();
-    setRechargeSuccess({ amount, balance: newBal });
-    setSelectedAmount(null);
-    setCustomAmount("");
+    try {
+      const updated = await recharge.mutateAsync({ amount, method: selectedMethod });
+      setRechargeSuccess({ amount, balance: updated?.balance ?? 0 });
+      setSelectedAmount(null);
+      setCustomAmount("");
+    } catch (err: any) {
+      toast({ title: "Recharge failed", description: err?.message || "Please try again", variant: "destructive" });
+    }
   };
 
   const tabs: { id: Tab; label: string; icon: React.ElementType }[] = [
@@ -61,7 +47,7 @@ export default function SmartCardPage() {
     { id: "history", label: "History", icon: History },
   ];
 
-  if (loading || !card) {
+  if (isLoading || !card) {
     return <div className="min-h-[50vh] flex items-center justify-center"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>;
   }
 
@@ -69,21 +55,22 @@ export default function SmartCardPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <section className="bg-secondary/60 border-b border-border py-10 sm:py-14">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-foreground mb-2">Smart Card Services</h1>
-          <p className="text-muted-foreground text-base">{profile?.passenger_id} · {holder}</p>
-        </div>
-      </section>
-
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-8 lg:py-10">
+        <FadeIn>
+          <PageHeader
+            eyebrow="Smart Card"
+            title="Your JMRC transit card"
+            description={`${profile?.passenger_id ?? ""} · ${holder}`}
+          />
+        </FadeIn>
         {/* Realistic Smart Card */}
-        <div className="mb-10 flex justify-center">
+        <FadeIn delay={0.05}>
+        <div className="mb-8 flex justify-center">
           <div className="relative w-full max-w-md">
-            <div className="absolute -inset-6 bg-primary/15 rounded-3xl blur-2xl" />
-            <div className="relative aspect-[1.586/1] bg-gradient-to-br from-[hsl(210,70%,18%)] via-primary to-[hsl(210,70%,30%)] rounded-2xl p-6 text-white shadow-2xl border border-white/10 overflow-hidden">
+            <div className="absolute -inset-6 bg-primary/20 rounded-3xl blur-2xl" />
+            <div className="relative aspect-[1.586/1] bg-gradient-to-br from-[hsl(220,39%,8%)] via-secondary to-[hsl(357,45%,20%)] rounded-2xl p-6 text-white shadow-2xl border border-white/10 overflow-hidden">
               <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full" />
-              <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-white/5 rounded-full" />
+              <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-primary/10 rounded-full" />
               <div className="relative flex items-center justify-between mb-6">
                 <p className="text-[10px] text-white/60 uppercase tracking-[0.2em] font-medium">JMRC Smart Card</p>
                 <Badge className="bg-success/20 text-success border-success/30 text-[10px] backdrop-blur-sm">{card.status}</Badge>
@@ -104,6 +91,7 @@ export default function SmartCardPage() {
             </div>
           </div>
         </div>
+        </FadeIn>
 
         {/* Tabs */}
         <div className="flex gap-2 mb-6 justify-center flex-wrap">
@@ -114,7 +102,7 @@ export default function SmartCardPage() {
                 key={tab.id}
                 variant={activeTab === tab.id ? "default" : "outline"}
                 onClick={() => { setActiveTab(tab.id); setRechargeSuccess(null); }}
-                className={`gap-2 rounded-full ${activeTab === tab.id ? "bg-primary text-primary-foreground hover:bg-[hsl(210,65%,30%)]" : ""}`}
+                className={`gap-2 rounded-full ${activeTab === tab.id ? "bg-primary text-primary-foreground hover:bg-[hsl(var(--primary-hover))]" : ""}`}
               >
                 <Icon className="w-4 h-4" /> {tab.label}
               </Button>

@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Header, Footer } from "@/components/Layout";
 import { AuthProvider } from "@/context/AuthContext";
 import { RequireAuth, RequireAdmin } from "@/components/guards";
+import { AppShell } from "@/components/layouts/AppShell";
 import HomePage from "./pages/HomePage";
 import JourneyPlannerPage from "./pages/JourneyPlannerPage";
 import MetroMapPage from "./pages/MetroMapPage";
@@ -31,7 +32,9 @@ function AppRoutes() {
   const location = useLocation();
   const isAdminArea = location.pathname.startsWith("/admin");
   const isAuth = location.pathname === "/auth";
-  const hideChrome = isAdminArea || isAuth;
+  const authedPaths = ["/dashboard", "/smart-card", "/complaints", "/track-complaint", "/profile"];
+  const isAuthedShell = authedPaths.some((p) => location.pathname === p || location.pathname.startsWith(p + "/"));
+  const hideChrome = isAdminArea || isAuth || isAuthedShell;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -51,11 +54,11 @@ function AppRoutes() {
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
           {/* Passenger (protected) */}
-          <Route path="/dashboard" element={<RequireAuth><DashboardPage /></RequireAuth>} />
-          <Route path="/smart-card" element={<RequireAuth><SmartCardPage /></RequireAuth>} />
-          <Route path="/complaints" element={<RequireAuth><ComplaintsPage /></RequireAuth>} />
-          <Route path="/track-complaint" element={<RequireAuth><TrackComplaintPage /></RequireAuth>} />
-          <Route path="/profile" element={<RequireAuth><ProfilePage /></RequireAuth>} />
+          <Route path="/dashboard" element={<RequireAuth><AppShell><DashboardPage /></AppShell></RequireAuth>} />
+          <Route path="/smart-card" element={<RequireAuth><AppShell><SmartCardPage /></AppShell></RequireAuth>} />
+          <Route path="/complaints" element={<RequireAuth><AppShell><ComplaintsPage /></AppShell></RequireAuth>} />
+          <Route path="/track-complaint" element={<RequireAuth><AppShell><TrackComplaintPage /></AppShell></RequireAuth>} />
+          <Route path="/profile" element={<RequireAuth><AppShell><ProfilePage /></AppShell></RequireAuth>} />
 
           {/* Admin (hidden) */}
           <Route path="/admin" element={<AdminLoginPage />} />

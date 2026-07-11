@@ -17,7 +17,7 @@ import {
 const statusColors: Record<string, string> = {
   "Submitted": "bg-info/10 text-info",
   "Under Review": "bg-warning/10 text-warning",
-  "In Progress": "bg-secondary/10 text-secondary",
+  "In Progress": "bg-accent/10 text-accent",
   "Resolved": "bg-success/10 text-success",
   "Closed": "bg-muted text-muted-foreground",
 };

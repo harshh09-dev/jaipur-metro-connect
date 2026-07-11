@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,11 +11,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { MessageSquare, Plus, Loader2, ArrowUpRight } from "lucide-react";
 import { allStations, complaintCategories } from "@/data/metro-data";
-
-interface Complaint {
-  id: string; reference: string; category: string; subject: string; description: string;
-  station: string | null; status: string; admin_response: string | null; created_at: string;
-}
+import { PageHeader } from "@/components/ui-kit/PageHeader";
+import { EmptyState } from "@/components/ui-kit/EmptyState";
+import { FadeIn } from "@/components/ui-kit/Motion";
+import { useComplaints, useCreateComplaint } from "@/lib/api/hooks/useComplaints";
 
 const statusColors: Record<string, string> = {
   submitted: "bg-info/10 text-info border-info/20",
@@ -28,52 +26,47 @@ const statusColors: Record<string, string> = {
 export default function ComplaintsPage() {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [list, setList] = useState<Complaint[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [creating, setCreating] = useState(false);
+  const { data: list = [], isLoading } = useComplaints();
+  const create = useCreateComplaint();
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ category: "", subject: "", description: "", station: "" });
 
-  const load = async () => {
-    if (!user) return;
-    setLoading(true);
-    const { data } = await supabase.from("complaints").select("*").eq("user_id", user.id).order("created_at", { ascending: false });
-    setList((data as Complaint[]) || []);
-    setLoading(false);
-  };
-  useEffect(() => { load(); }, [user]);
-
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.category || !form.subject || form.description.length < 10) {
+    if (!user || !form.category || !form.subject || form.description.length < 10) {
       return toast({ title: "Missing info", description: "Category, subject and 10+ char description are required.", variant: "destructive" });
     }
-    setCreating(true);
-    const reference = "JMRC-" + Math.random().toString(36).slice(2, 8).toUpperCase();
-    const { error } = await supabase.from("complaints").insert({
-      user_id: user!.id, reference,
-      category: form.category, subject: form.subject, description: form.description, station: form.station || null,
-    });
-    setCreating(false);
-    if (error) return toast({ title: "Failed", description: error.message, variant: "destructive" });
-    toast({ title: "Complaint filed", description: `Reference: ${reference}` });
-    setForm({ category: "", subject: "", description: "", station: "" });
-    setShowForm(false);
-    load();
+    try {
+      const reference = await create.mutateAsync({
+        category: form.category, subject: form.subject,
+        description: form.description, station: form.station || null,
+      });
+      toast({ title: "Complaint filed", description: `Reference: ${reference}` });
+      setForm({ category: "", subject: "", description: "", station: "" });
+      setShowForm(false);
+    } catch (err: any) {
+      toast({ title: "Failed", description: err?.message || "Please try again", variant: "destructive" });
+    }
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Your complaints</h1>
-          <p className="text-muted-foreground mt-1">File and track feedback with JMRC.</p>
-        </div>
-        <Button onClick={() => setShowForm(v => !v)} className="rounded-full gap-1.5"><Plus className="w-4 h-4" />New complaint</Button>
-      </div>
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-10 py-8 lg:py-10">
+      <FadeIn>
+        <PageHeader
+          eyebrow="Support"
+          title="Your complaints"
+          description="File a concern and track its resolution end-to-end."
+          actions={
+            <Button onClick={() => setShowForm(v => !v)} className="rounded-full gap-1.5 bg-primary hover:bg-[hsl(var(--primary-hover))]">
+              <Plus className="w-4 h-4" />New complaint
+            </Button>
+          }
+        />
+      </FadeIn>
 
       {showForm && (
-        <Card className="rounded-3xl mb-6">
+        <FadeIn>
+        <Card className="rounded-3xl mb-6 border-border/60">
           <CardContent className="p-6">
             <form onSubmit={submit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -96,28 +89,27 @@ export default function ComplaintsPage() {
               <div className="space-y-1.5"><Label>Description *</Label><Textarea required rows={4} value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className="rounded-xl" /></div>
               <div className="flex gap-2 justify-end">
                 <Button type="button" variant="outline" className="rounded-full" onClick={() => setShowForm(false)}>Cancel</Button>
-                <Button type="submit" disabled={creating} className="rounded-full">{creating && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Submit</Button>
+                <Button type="submit" disabled={create.isPending} className="rounded-full bg-primary hover:bg-[hsl(var(--primary-hover))]">
+                  {create.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}Submit
+                </Button>
               </div>
             </form>
           </CardContent>
         </Card>
+        </FadeIn>
       )}
 
-      {loading ? (
+      {isLoading ? (
         <div className="py-16 flex justify-center"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
       ) : list.length === 0 ? (
-        <Card className="rounded-3xl">
-          <CardContent className="p-12 text-center">
-            <MessageSquare className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
-            <p className="font-medium">No complaints yet</p>
-            <p className="text-sm text-muted-foreground">File your first complaint to see it here.</p>
-          </CardContent>
+        <Card className="rounded-3xl border-border/60">
+          <EmptyState icon={MessageSquare} title="No complaints yet" description="File your first complaint to see it here." />
         </Card>
       ) : (
         <div className="space-y-3">
           {list.map(c => (
             <Link key={c.id} to={`/track-complaint?ref=${c.reference}`} className="block">
-              <Card className="rounded-2xl hover:shadow-md transition">
+              <Card className="rounded-2xl border-border/60 hover:shadow-md hover:border-border transition">
                 <CardContent className="p-5 flex items-center gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">

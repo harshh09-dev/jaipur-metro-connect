@@ -360,7 +360,7 @@ export default function MetroMapPage() {
                       <div className="text-[9px] text-muted-foreground uppercase">Fare</div>
                     </div>
                     <div className="text-center p-3 bg-muted rounded-xl hover-lift">
-                      <MapPin className="w-4 h-4 mx-auto text-secondary" />
+                      <MapPin className="w-4 h-4 mx-auto text-accent" />
                       <div className="text-lg font-extrabold text-foreground">{result.stations}</div>
                       <div className="text-[9px] text-muted-foreground uppercase">Stops</div>
                     </div>
@@ -415,7 +415,7 @@ export default function MetroMapPage() {
                     </div>
                     {spots && spots.length > 0 && (
                       <div className="mt-3 pt-2 border-t border-border">
-                        <div className="flex items-center gap-1 text-xs text-secondary font-medium mb-1">
+                        <div className="flex items-center gap-1 text-xs text-accent font-medium mb-1">
                           <Landmark className="w-3 h-3" /> Nearby Attractions
                         </div>
                         {spots.map(s => (

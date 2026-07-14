@@ -22,22 +22,24 @@ export interface AdminComplaintRow {
 
 export const adminComplaintRepo = {
   async list(): Promise<AdminComplaintRow[]> {
-    const { data, error } = await supabase
-      .from("complaints")
-      .select("*, profiles:profiles!complaints_user_id_fkey(full_name,email,phone)")
-      .order("created_at", { ascending: false });
-    if (error) {
-      // fallback without join if FK missing in relationship graph
-      const { data: d2, error: e2 } = await supabase.from("complaints").select("*").order("created_at", { ascending: false });
-      if (e2) throw e2;
-      return (d2 as AdminComplaintRow[]) || [];
+    const { data, error } = await supabase.from("complaints").select("*").order("created_at", { ascending: false });
+    if (error) throw error;
+    const rows = (data || []) as unknown as AdminComplaintRow[];
+    const ids = Array.from(new Set(rows.map((r) => r.user_id)));
+    if (ids.length) {
+      const { data: profs } = await supabase.from("profiles").select("id,full_name,email,phone").in("id", ids);
+      const map = new Map<string, { full_name: string; email: string | null; phone: string | null }>();
+      (profs || []).forEach((p: { id: string; full_name: string; email: string | null; phone: string | null }) =>
+        map.set(p.id, { full_name: p.full_name, email: p.email, phone: p.phone }));
+      rows.forEach((r) => { r.profiles = map.get(r.user_id) ?? null; });
     }
-    return (data as AdminComplaintRow[]) || [];
+    return rows;
   },
   async update(id: string, patch: Partial<AdminComplaintRow>) {
-    const payload: Record<string, unknown> = { ...patch };
+    const payload = { ...patch } as Partial<AdminComplaintRow>;
     if (patch.status === "resolved" && !patch.resolved_at) payload.resolved_at = new Date().toISOString();
-    const { error } = await supabase.from("complaints").update(payload).eq("id", id);
+    delete payload.profiles;
+    const { error } = await supabase.from("complaints").update(payload as never).eq("id", id);
     if (error) throw error;
   },
 };

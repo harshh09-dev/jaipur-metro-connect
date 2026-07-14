@@ -17,12 +17,17 @@ export type Database = {
       complaints: {
         Row: {
           admin_response: string | null
+          assigned_officer: string | null
           category: string
           created_at: string
           description: string
           id: string
           image_url: string | null
+          priority: string
           reference: string
+          resolution_notes: string | null
+          resolved_at: string | null
+          sla_deadline: string | null
           station: string | null
           status: string
           subject: string
@@ -31,12 +36,17 @@ export type Database = {
         }
         Insert: {
           admin_response?: string | null
+          assigned_officer?: string | null
           category: string
           created_at?: string
           description: string
           id?: string
           image_url?: string | null
+          priority?: string
           reference: string
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          sla_deadline?: string | null
           station?: string | null
           status?: string
           subject: string
@@ -45,17 +55,76 @@ export type Database = {
         }
         Update: {
           admin_response?: string | null
+          assigned_officer?: string | null
           category?: string
           created_at?: string
           description?: string
           id?: string
           image_url?: string | null
+          priority?: string
           reference?: string
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          sla_deadline?: string | null
           station?: string | null
           status?: string
           subject?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          archived_at: string | null
+          body: string | null
+          category: string
+          created_at: string
+          cta_href: string | null
+          cta_label: string | null
+          expires_at: string | null
+          id: string
+          priority: string
+          read_at: string | null
+          related_id: string | null
+          related_type: string | null
+          target_audience: string
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          archived_at?: string | null
+          body?: string | null
+          category?: string
+          created_at?: string
+          cta_href?: string | null
+          cta_label?: string | null
+          expires_at?: string | null
+          id?: string
+          priority?: string
+          read_at?: string | null
+          related_id?: string | null
+          related_type?: string | null
+          target_audience?: string
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          archived_at?: string | null
+          body?: string | null
+          category?: string
+          created_at?: string
+          cta_href?: string | null
+          cta_label?: string | null
+          expires_at?: string | null
+          id?: string
+          priority?: string
+          read_at?: string | null
+          related_id?: string | null
+          related_type?: string | null
+          target_audience?: string
+          title?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -154,40 +223,55 @@ export type Database = {
       }
       tickets: {
         Row: {
+          cancelled_at: string | null
           created_at: string
           fare: number
           from_station: string
           id: string
           journey_date: string
+          passengers: number
+          payment_method: string
           qr_payload: string
           reference: string
           status: string
+          ticket_type: string
           to_station: string
           user_id: string
+          valid_until: string | null
         }
         Insert: {
+          cancelled_at?: string | null
           created_at?: string
           fare: number
           from_station: string
           id?: string
           journey_date?: string
+          passengers?: number
+          payment_method?: string
           qr_payload: string
           reference: string
           status?: string
+          ticket_type?: string
           to_station: string
           user_id: string
+          valid_until?: string | null
         }
         Update: {
+          cancelled_at?: string | null
           created_at?: string
           fare?: number
           from_station?: string
           id?: string
           journey_date?: string
+          passengers?: number
+          payment_method?: string
           qr_payload?: string
           reference?: string
           status?: string
+          ticket_type?: string
           to_station?: string
           user_id?: string
+          valid_until?: string | null
         }
         Relationships: []
       }
@@ -247,6 +331,65 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      book_ticket: {
+        Args: {
+          _fare: number
+          _from: string
+          _journey_date: string
+          _passengers?: number
+          _ticket_type?: string
+          _to: string
+        }
+        Returns: {
+          cancelled_at: string | null
+          created_at: string
+          fare: number
+          from_station: string
+          id: string
+          journey_date: string
+          passengers: number
+          payment_method: string
+          qr_payload: string
+          reference: string
+          status: string
+          ticket_type: string
+          to_station: string
+          user_id: string
+          valid_until: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "tickets"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      cancel_ticket: {
+        Args: { _ticket_id: string }
+        Returns: {
+          cancelled_at: string | null
+          created_at: string
+          fare: number
+          from_station: string
+          id: string
+          journey_date: string
+          passengers: number
+          payment_method: string
+          qr_payload: string
+          reference: string
+          status: string
+          ticket_type: string
+          to_station: string
+          user_id: string
+          valid_until: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "tickets"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

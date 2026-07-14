@@ -22,6 +22,8 @@ import SmartCardPage from "./pages/SmartCardPage";
 import AuthPage from "./pages/AuthPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
+import NotificationsPage from "./pages/NotificationsPage";
+import TicketsPage from "./pages/TicketsPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import NotFound from "./pages/NotFound";
@@ -32,7 +34,7 @@ function AppRoutes() {
   const location = useLocation();
   const isAdminArea = location.pathname.startsWith("/admin");
   const isAuth = location.pathname === "/auth";
-  const authedPaths = ["/dashboard", "/smart-card", "/complaints", "/track-complaint", "/profile"];
+  const authedPaths = ["/dashboard", "/smart-card", "/complaints", "/track-complaint", "/profile", "/notifications", "/tickets"];
   const isAuthedShell = authedPaths.some((p) => location.pathname === p || location.pathname.startsWith(p + "/"));
   const hideChrome = isAdminArea || isAuth || isAuthedShell;
 
@@ -59,6 +61,8 @@ function AppRoutes() {
           <Route path="/complaints" element={<RequireAuth><AppShell><ComplaintsPage /></AppShell></RequireAuth>} />
           <Route path="/track-complaint" element={<RequireAuth><AppShell><TrackComplaintPage /></AppShell></RequireAuth>} />
           <Route path="/profile" element={<RequireAuth><AppShell><ProfilePage /></AppShell></RequireAuth>} />
+          <Route path="/notifications" element={<RequireAuth><AppShell><NotificationsPage /></AppShell></RequireAuth>} />
+          <Route path="/tickets" element={<RequireAuth><AppShell><TicketsPage /></AppShell></RequireAuth>} />
 
           {/* Admin (hidden) */}
           <Route path="/admin" element={<AdminLoginPage />} />

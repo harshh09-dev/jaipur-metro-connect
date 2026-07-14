@@ -5,6 +5,7 @@ import {
   Map, Bell, LogOut, Search, Ticket, Menu,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { useUnreadCount } from "@/lib/api/hooks/useNotifications";
 import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuSeparator, DropdownMenuLabel,
@@ -15,6 +16,7 @@ import { cn } from "@/lib/utils";
 
 const primary = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/tickets", label: "Tickets", icon: Ticket },
   { to: "/smart-card", label: "Smart Card", icon: CreditCard },
   { to: "/journey-planner", label: "Journey Planner", icon: RouteIcon },
   { to: "/metro-map", label: "Metro Map", icon: Map },
@@ -22,16 +24,16 @@ const primary = [
 ];
 
 const secondary = [
+  { to: "/notifications", label: "Notifications", icon: Bell },
   { to: "/track-complaint", label: "Track Complaint", icon: Search },
-  { to: "/announcements", label: "Announcements", icon: Bell },
   { to: "/profile", label: "Profile", icon: User },
 ];
 
 const mobileTabs = [
   { to: "/dashboard", label: "Home", icon: LayoutDashboard },
-  { to: "/journey-planner", label: "Journey", icon: RouteIcon },
+  { to: "/tickets", label: "Tickets", icon: Ticket },
   { to: "/smart-card", label: "Card", icon: CreditCard },
-  { to: "/complaints", label: "Support", icon: MessageSquare },
+  { to: "/notifications", label: "Alerts", icon: Bell },
   { to: "/profile", label: "Profile", icon: User },
 ];
 
@@ -78,6 +80,7 @@ function SidebarBody() {
 export function AppShell({ children }: { children: ReactNode }) {
   const { profile, signOut } = useAuth();
   const nav = useNavigate();
+  const unread = useUnreadCount();
   const initials = (profile?.full_name || "U").split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
 
   return (
@@ -140,10 +143,14 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
 
           <div className="flex items-center gap-2">
-            <button className="hidden sm:flex w-9 h-9 rounded-full hover:bg-muted items-center justify-center relative" aria-label="Notifications">
+            <Link to="/notifications" className="hidden sm:flex w-9 h-9 rounded-full hover:bg-muted items-center justify-center relative" aria-label="Notifications">
               <Bell className="w-4 h-4 text-foreground" />
-              <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-primary" />
-            </button>
+              {unread > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
+                  {unread > 9 ? "9+" : unread}
+                </span>
+              )}
+            </Link>
             <DropdownMenu>
               <DropdownMenuTrigger className="w-9 h-9 rounded-full bg-primary text-primary-foreground text-xs font-semibold flex items-center justify-center shadow-sm">
                 {initials}

@@ -13,6 +13,7 @@ import {
   Brain, MapPin, ThermometerSun, Zap, MessageSquare, BarChart3, Bell, Settings,
   ChevronLeft, ChevronRight, Home, Users, Shield
 } from "lucide-react";
+import { AdminComplaintManager } from "@/components/admin/AdminComplaintManager";
 
 const statusColors: Record<string, string> = {
   "Submitted": "bg-info/10 text-info",
@@ -229,6 +230,9 @@ export default function AdminDashboardPage() {
         );
 
       case "complaints":
+        return <AdminComplaintManager />;
+
+      case "complaints_legacy":
         return (
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row gap-3">
